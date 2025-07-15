@@ -1,0 +1,37 @@
+plugins {
+    id 'org.springframework.boot' version '3.2.5'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'java'
+}
+
+group = 'com.bobhub'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '21'
+targetCompatibility = '21'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring Web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Thymeleaf
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    // MyBatis
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+
+    // Oracle JDBC (주의: 수동 설치 필요 가능)
+    implementation 'com.oracle.database.jdbc:ojdbc11:21.9.0.0' // ojdbc8은 자바 21 비호환 가능성 있음
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // 테스트
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+}
