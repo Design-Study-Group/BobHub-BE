@@ -16,10 +16,8 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
-    @GetMapping("/users")
-    public String getUsers(Model model) {
-        List<User> users = userMapper.findAll();
-        model.addAttribute("users", users);
-        return "userList"; // templates/userList.html
+    @GetMapping("/")
+    public String main() {
+        return "main";
     }
 }
