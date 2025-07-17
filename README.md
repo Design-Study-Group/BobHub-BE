@@ -46,7 +46,7 @@
 pip install poetry
 
 # poetry 종속성 동기화(최초 1회만 실행)
-poetry install
+poetry install --no-root
 
 # commit 이전에 검사 후 커밋
 poetry run pre-commit run --all-files
