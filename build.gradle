@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '3.2.5'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'java'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 group = 'com.bobhub'
@@ -34,4 +35,12 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+}
+
+// spotless: 코드 포메터
+spotless {
+    java {
+        target 'src/**/*.java'
+        googleJavaFormat()
+    }
 }
