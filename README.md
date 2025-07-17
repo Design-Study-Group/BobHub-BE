@@ -25,6 +25,7 @@
 이슈 번호 5번에 대한 새로운 기능 개발 → `Feat-5`
 
 ---
+
 ## 커밋 메시지 규칙
 
 - 형식:  
@@ -32,11 +33,23 @@
 - 예시:  
   Feat 회원가입 기능 추가
 
-
 ### 작성 규칙
 
 - 키워드 첫 글자는 **대문자**
 - 키워드와 내용 사이는 **한 칸 띄어쓰기**
 - **제목은 간결하게**
+
+## pre-commit 명령어
+
+```bash
+# poetry 설치가 안되어 있을 경우
+pip install poetry
+
+# poetry 종속성 동기화(최초 1회만 실행)
+poetry install
+
+# commit 이전에 검사 후 커밋
+poetry run pre-commit run --all-files
+```
 
 ---
