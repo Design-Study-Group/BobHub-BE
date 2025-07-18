@@ -1,4 +1,3 @@
 package com.bobhub.domain;
 
-public class User {
-}
+public class User {}
