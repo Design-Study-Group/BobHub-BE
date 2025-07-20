@@ -26,6 +26,9 @@ dependencies {
     // Oracle JDBC (주의: 수동 설치 필요 가능)
     implementation 'com.oracle.database.jdbc:ojdbc11:21.9.0.0' // ojdbc8은 자바 21 비호환 가능성 있음
 
+    //Google OAuth2
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
