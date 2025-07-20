@@ -7,5 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface UserMapper {
-    List<User> findAll();
+    User findByEmail(String email);
+    void insertUser(User user);
 }
+
