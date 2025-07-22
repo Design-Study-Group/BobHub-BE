@@ -1,0 +1,25 @@
+locale: ko
+language: java
+
+review:
+  enable: true
+  comment_mode: inline
+  summarize: true
+  summarize_only: false
+  max_comments: 3
+
+auto_review:
+  enabled: true
+  draft_prs: false
+  min_lines_of_code: 0
+  ignore_files:
+    - "*.md"
+
+behavior:
+  suggest_improvements: true
+
+comments:
+  tone: "friendly"
+
+suggest:
+  enable: true
