@@ -9,10 +9,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Recommendation {
-    private long id;
-    private String storeName;
-    private int star;
-    private int totalTime;
-    private int pricePerPerson;
-    private boolean isReservation;
+  private long id;
+  private String storeName;
+  private int star;
+  private int totalTime;
+  private int pricePerPerson;
+  private boolean isReservation;
 }

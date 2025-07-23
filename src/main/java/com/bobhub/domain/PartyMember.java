@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PartyMember {
-    private long id;
-    private long partyId;
-    private long userId;
+  private long id;
+  private long partyId;
+  private long userId;
 }

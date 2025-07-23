@@ -1,8 +1,7 @@
 package com.bobhub.domain;
 
-import lombok.*;
-
 import java.util.Date;
+import lombok.*;
 
 @Getter
 @Setter
@@ -11,9 +10,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Comments {
-    private long id;
-    private long partyId;
-    private long writerId;
-    private String comments;
-    Date createdAt;
+  private long id;
+  private long partyId;
+  private long writerId;
+  private String comments;
+  Date createdAt;
 }
