@@ -1,4 +1,4 @@
-locale: ko
+locale: "ko"
 language: java
 
 review:
