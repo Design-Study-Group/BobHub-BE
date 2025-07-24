@@ -30,6 +30,7 @@ spring:
             token-uri: https://oauth2.googleapis.com/token
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
             user-name-attribute: sub
+
 server:
   forward-headers-strategy: framework
   servlet:
@@ -38,6 +39,13 @@ server:
         name: JSESSIONID
         secure: true
         same-site: none
+
 mybatis:
   mapper-locations: classpath:/mappers/*.xml
   type-aliases-package: com.bobhub.domain
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
+

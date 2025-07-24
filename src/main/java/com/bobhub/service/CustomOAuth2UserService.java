@@ -23,22 +23,35 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+    System.out.println("CustomOAuth2UserService: loadUser 호출됨");
+
     OAuth2User oAuth2User = super.loadUser(userRequest);
 
     String registrationId = userRequest.getClientRegistration().getRegistrationId();
     Map<String, Object> attributes = oAuth2User.getAttributes();
 
+    System.out.println("RegistrationId: " + registrationId);
+    System.out.println("User attributes: " + attributes);
+
     String email = (String) attributes.get("email");
     String name = (String) attributes.get("name");
     String picture = (String) attributes.get("picture");
 
+    System.out.println("Email: " + email);
+    System.out.println("Name: " + name);
+    System.out.println("Picture: " + picture);
+
     User user = userMapper.findByEmail(email);
     if (user == null) {
+      System.out.println("User not found. Creating new user.");
       user = new User();
       user.setEmail(email);
       user.setName(name);
       user.setPicture(picture);
       userMapper.insertUser(user);
+      System.out.println("User created and saved to DB.");
+    } else {
+      System.out.println("User found in DB: " + user.getEmail());
     }
 
     return new DefaultOAuth2User(
