@@ -3,10 +3,10 @@ spring:
     name: BobHub
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
-    driver-class-name: ${SPRING_DATASOURCE_DRIVER}
+    url: ${{secrets.SPRING_DATASOURCE_URL}}
+    username: ${{secrets.SPRING_DATASOURCE_USERNAME}}
+    password: ${{secrets.SPRING_DATASOURCE_PASSWORD}}
+    driver-class-name: ${{secrets.SPRING_DATASOURCE_DRIVER}}
 
   thymeleaf:
     prefix: classpath:/templates/
@@ -18,8 +18,8 @@ spring:
        client:
         registration:
           google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
+            client-id: ${{secrets.GOOGLE_CLIENT_ID}}
+            client-secret: ${{secrets.GOOGLE_CLIENT_SECRET}}
             redirect-uri: "https://developlee20.store/login/oauth2/code/google"
             scope:
               - email
