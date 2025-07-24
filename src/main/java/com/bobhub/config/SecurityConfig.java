@@ -14,8 +14,7 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(
       HttpSecurity http, CustomOAuth2UserService customOAuth2UserService) throws Exception {
-    http.csrf(csrf -> csrf.disable())
-        .authorizeHttpRequests(
+    http.authorizeHttpRequests(
             auth ->
                 auth.requestMatchers("/", "/login", "/css/**", "/images/**")
                     .permitAll()
