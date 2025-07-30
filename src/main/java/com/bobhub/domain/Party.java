@@ -11,13 +11,13 @@ import lombok.*;
 @AllArgsConstructor
 public class Party {
   private long id;
+  private PartyCategory category;
   private String title;
   private int limitPeople;
   private int limitPrice;
   private long ownerId;
   private long memberId;
   private boolean isOpen;
-
   private Date createdAt;
   private Date finishedAt;
 }
