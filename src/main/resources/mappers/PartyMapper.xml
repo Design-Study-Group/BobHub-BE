@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bobhub.mapper.PartyMapper">
+
+  <!-- 카테고리별 파티 목록 조회 -->
+  <select id="getPartiesByCategory" parameterType="string" resultType="Party">
+    SELECT
+      id,
+      category,
+      title,
+      limit_people as limitPeople,
+      limit_price as limitPrice,
+      owner_id as ownerId,
+      member_id as memberId,
+      is_open as isOpen,
+      created_at as createdAt,
+      finished_at as finishedAt
+    FROM party
+    WHERE category = #{category}
+    ORDER BY created_at DESC
+  </select>
+</mapper>
