@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bobhub.mapper.CommentMapper">
+
+    <resultMap id="CommentResultMap" type="com.bobhub.domain.Comments">
+        <id property="id" column="id"/>
+        <result property="partyId" column="party_id"/>
+        <result property="writerId" column="writer_id"/>
+        <result property="name" column="name"/>
+        <result property="comments" column="comments"/>
+        <result property="createdAt" column="create_at"/>
+    </resultMap>
+
+    <select id="findByPartyId" resultMap="CommentResultMap">
+        SELECT c.id, c.party_id, s.name, c.writer_id, c.comments, c.create_at
+        FROM comments c
+                 JOIN users s ON c.writer_id = s.id
+        WHERE c.party_id = #{partyId}
+    </select>
+
+    <insert id="insertComment">
+        INSERT INTO comments (party_id, writer_id, comments)
+        VALUES (#{partyId}, #{writerId}, #{comments})
+    </insert>
+
+    <update id="updateComment">
+        UPDATE comments SET comments = #{comments}
+        WHERE party_id = #{partyId}
+    </update>
+
+    <delete id="deleteComment">
+        DELETE FROM comments WHERE id = #{id}
+    </delete>
+
+</mapper>
