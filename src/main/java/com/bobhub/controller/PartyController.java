@@ -4,6 +4,7 @@ import com.bobhub.dto.PartyCreateRequest;
 import com.bobhub.dto.PartyViewResponse;
 import com.bobhub.mapper.UserMapper;
 import com.bobhub.service.PartyService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -40,8 +41,24 @@ public class PartyController {
     }
 
     @PostMapping("/create")
-    public String createParties(@ModelAttribute PartyCreateRequest request) {
+    public String createParties(Principal principal, @ModelAttribute PartyCreateRequest request) {
+        String email = null;
+        if (principal instanceof OAuth2AuthenticationToken) {
+            OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) principal;
+            email = (String) oauthToken.getPrincipal().getAttributes().get("email");
+        } else {
+            email = principal.getName(); // 일반 로그인 등일 경우
+        }
+
+        if (email == null) {
+            throw new IllegalStateException("로그인 정보에 이메일이 없습니다.");
+        }
+
+        Long userId = userMapper.findByEmail(email).getId();
+        request.setOwnerId(userId);
         partyService.createParty(request);
+
         return "redirect:/parties";
     }
+
 }
