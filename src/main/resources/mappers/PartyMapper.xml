@@ -31,7 +31,7 @@
             p.is_open AS isOpen,
             p.created_at AS createdAt,
             p.finished_at AS finishedAt,
-            (SELECT COUNT(*) FROM partymember pm WHERE pm.party_id = p.id) AS currentPeople
+            (SELECT COUNT(*) + 1 FROM partymember pm WHERE pm.party_id = p.id) AS currentPeople
         FROM party p
         WHERE p.category = #{category}
         ORDER BY p.created_at DESC
