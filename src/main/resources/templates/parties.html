@@ -39,9 +39,8 @@
                     <h5 th:text="${party.title}"></h5>
                     <p>
                         참여 인원: <span th:text="${party.currentPeople}"></span> / <span th:text="${party.limitPeople}"></span><br />
-                        마감 시간: <span th:text="${#dates.format(party.finishedAt, 'yyyy-MM-dd HH:mm')}"></span><br />
+                        <span th:text="${#temporals.format(party.finishedAt, 'yyyy-MM-dd HH:mm')}"></span>
                         <span th:if="${party.limitPrice > 0}">최소 주문 금액: <span th:text="${party.limitPrice}"></span>원</span><br />
-                        <span th:unless="${party.isOpen}" class="closed-party">(마감)</span>
                     </p>
                 </a>
             </li>
