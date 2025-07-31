@@ -3,6 +3,7 @@ package com.bobhub.service;
 import com.bobhub.domain.Party;
 import com.bobhub.domain.PartyCategory;
 import com.bobhub.dto.PartyCreateRequest;
+import com.bobhub.dto.PartyViewResponse;
 import com.bobhub.mapper.PartyMapper;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +22,14 @@ public class PartyService {
         this.partyMapper = partyMapper;
     }
 
-    public List<Party> getPartiesByCategory(String category) {
-        List<Party> parties = partyMapper.getPartiesByCategory(category);
-        for (Party party : parties) {
-            if (party.getFinishedAt() != null && party.getFinishedAt().isBefore(LocalDate.now())) {
+    public List<PartyViewResponse> getPartiesByCategory(String category) {
+        List<PartyViewResponse> parties = partyMapper.getPartiesByCategory(category);
+        LocalDateTime now = LocalDateTime.now();
+        for (PartyViewResponse party : parties) {
+            if (party.getFinishedAt() != null && party.getFinishedAt().isBefore(now)) {
                 party.setOpen(false);
+            } else {
+                party.setOpen(true);
             }
         }
         return parties;
@@ -33,19 +37,19 @@ public class PartyService {
 
     public void createParty(PartyCreateRequest request) {
         LocalDateTime finishedAt = LocalDateTime.parse(request.getFinishedAt(), dateTimeFormatter);
-        PartyCategory partyCategory = PartyCategory.valueOf(request.getCategory());
+        PartyCategory partyCategory = PartyCategory.valueOf(request.getCategory().toUpperCase());
         long ownerId = Long.parseLong(request.getOwnerId());
         int limitPrice = request.getLimitPrice() != null ? request.getLimitPrice() : 0;
 
         Party party = Party.builder()
-                            .title(request.getTitle())
-                            .limitPeople(request.getLimitPeople())
-                            .limitPrice(limitPrice)
-                            .ownerId(ownerId)
-                            .finishedAt(LocalDate.from(finishedAt))
-                            .category(partyCategory)
-                            .isOpen(true)
-                            .build();
+                .title(request.getTitle())
+                .limitPeople(request.getLimitPeople())
+                .limitPrice(limitPrice)
+                .ownerId(ownerId)
+                .finishedAt(finishedAt)
+                .category(partyCategory)
+                .isOpen(true)
+                .build();
 
         partyMapper.createParty(party);
     }
