@@ -9,4 +9,5 @@ import java.util.List;
 @Mapper
 public interface PartyMapper {
     List<Party> getPartiesByCategory(@Param("category") String category);
+    void createParty(Party party);
 }
