@@ -22,4 +22,26 @@
     WHERE category = #{category}
     ORDER BY created_at DESC
   </select>
+
+  <insert id="createParty" parameterType="Party" useGeneratedKeys="false" keyProperty="id">
+    INSERT INTO party (
+      title,
+      finished_at,
+      limit_people,
+      limit_price,
+      owner_id,
+      is_open,
+      category
+    )
+    VALUES (
+             #{title},
+             #{finishedAt},
+             #{limitPeople},
+             #{limitPrice},
+             #{ownerId},
+             #{isOpen},
+             #{category}
+           )
+  </insert>
+
 </mapper>

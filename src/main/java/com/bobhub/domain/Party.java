@@ -1,6 +1,6 @@
 package com.bobhub.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
 import lombok.*;
 
 @Getter
@@ -18,6 +18,6 @@ public class Party {
   private long ownerId;
   private long memberId;
   private boolean isOpen;
-  private Date createdAt;
-  private Date finishedAt;
+  private LocalDate createdAt;
+  private LocalDate finishedAt;
 }

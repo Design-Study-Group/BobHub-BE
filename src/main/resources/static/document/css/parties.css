@@ -75,3 +75,57 @@ body {
     color: #d32f2f;
     font-weight: bold;
 }
+
+/* 모달 외형 */
+.custom-modal-content {
+    background-color: #fffaf3;
+    border-radius: 18px;
+    border: 1px solid #e5d4c3;
+    padding: 10px 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+/* 제목 스타일 */
+.modal-title-custom {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #d86c3f;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 입력 폼 여백 및 디자인 */
+.modal-body .form-label {
+    font-weight: 600;
+    color: #3e2c1c;
+}
+
+.modal-body .form-control,
+.modal-body .form-select {
+    border-radius: 10px;
+    border: 1px solid #e2d4c3;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+}
+
+.modal-body .form-control:focus,
+.modal-body .form-select:focus {
+    border-color: #d86c3f;
+    box-shadow: 0 0 0 0.15rem rgba(216, 108, 63, 0.25);
+}
+
+/* 제출 버튼 */
+.btn-modal-submit {
+    background-color: #f87437;
+    color: white;
+    font-weight: 600;
+    padding: 10px 24px;
+    border-radius: 12px;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-modal-submit:hover {
+    background-color: #9f3f14;
+}

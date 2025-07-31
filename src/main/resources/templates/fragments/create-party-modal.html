@@ -1,0 +1,50 @@
+<!-- fragments/modal.html -->
+<div th:fragment="createPartyModal">
+    <div class="modal fade" id="createPartyModal" tabindex="-1" aria-labelledby="createPartyLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content custom-modal-content">
+                <form th:action="@{/parties/create}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <input type="hidden" name="ownerId" th:value="${userId}" />
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title modal-title-custom" id="createPartyLabel">새로운 파티 만들기</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+                    </div>
+                    <div class="modal-body pt-0">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label">파티 제목</label>
+                                <input type="text" class="form-control" name="title" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">최대 인원 수</label>
+                                <input type="number" class="form-control" name="limitPeople" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">최소 주문 금액</label>
+                                <input type="number" class="form-control" name="limitPrice" placeholder="선택 사항" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">마감 시간</label>
+                                <input type="datetime-local" class="form-control" name="finishedAt" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">파티 종류</label>
+                                <select class="form-select" name="category">
+                                    <option value="DELIVERY">배달</option>
+                                    <option value="DINE_OUT">외식</option>
+                                    <option value="LUNCHBOX">도시락</option>
+                                    <option value="BETTING">내기</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 mt-4">
+                        <button type="submit" class="btn btn-modal-submit">생성하기</button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
