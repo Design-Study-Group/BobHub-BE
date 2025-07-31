@@ -19,7 +19,7 @@ public class Party {
   private int limitPrice;
   private long ownerId;
   private long memberId;
-  private boolean isOpen;
+  private Boolean isOpen;
   private LocalDateTime createdAt;
   private LocalDateTime finishedAt;
 }

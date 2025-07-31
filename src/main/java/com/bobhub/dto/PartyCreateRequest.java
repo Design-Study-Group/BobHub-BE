@@ -13,6 +13,6 @@ public class PartyCreateRequest {
     private Integer limitPrice;
     private String finishedAt;
     private String category;
-    private String ownerId;
-    private boolean isOpen;
+    private Long ownerId;
+    private Boolean isOpen;
 }

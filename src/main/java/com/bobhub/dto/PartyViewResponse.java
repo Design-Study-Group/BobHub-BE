@@ -16,8 +16,8 @@ public class PartyViewResponse {
     private String title;
     private int limitPeople;
     private int limitPrice;
-    private long ownerId;
-    private boolean isOpen;
+    private Long ownerId;
+    private Boolean isOpen;
     private LocalDateTime createdAt;
     private LocalDateTime finishedAt;
     private int currentPeople;

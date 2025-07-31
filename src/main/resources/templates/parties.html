@@ -24,7 +24,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4 tab-header">
         <div class="tab-menu">
             <a th:href="@{/parties(category='delivery')}" th:classappend="${category} == 'delivery' ? ' active' : ''" class="tab">배달</a>
-            <a th:href="@{/parties(category='dine-out')}" th:classappend="${category} == 'dine-out' ? ' active' : ''" class="tab">외식</a>
+            <a th:href="@{/parties(category='dine_out')}" th:classappend="${category} == 'dine_out' ? ' active' : ''" class="tab">외식</a>
             <a th:href="@{/parties(category='lunchbox')}" th:classappend="${category} == 'lunchbox' ? ' active' : ''" class="tab">도시락</a>
             <a th:href="@{/parties(category='betting')}" th:classappend="${category} == 'betting' ? ' active' : ''" class="tab">내기</a>
         </div>

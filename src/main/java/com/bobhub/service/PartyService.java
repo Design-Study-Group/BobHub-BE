@@ -6,8 +6,6 @@ import com.bobhub.dto.PartyCreateRequest;
 import com.bobhub.dto.PartyViewResponse;
 import com.bobhub.mapper.PartyMapper;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -27,9 +25,9 @@ public class PartyService {
         LocalDateTime now = LocalDateTime.now();
         for (PartyViewResponse party : parties) {
             if (party.getFinishedAt() != null && party.getFinishedAt().isBefore(now)) {
-                party.setOpen(false);
+                party.setIsOpen(false);
             } else {
-                party.setOpen(true);
+                party.setIsOpen(true);
             }
         }
         return parties;
@@ -38,14 +36,13 @@ public class PartyService {
     public void createParty(PartyCreateRequest request) {
         LocalDateTime finishedAt = LocalDateTime.parse(request.getFinishedAt(), dateTimeFormatter);
         PartyCategory partyCategory = PartyCategory.valueOf(request.getCategory().toUpperCase());
-        long ownerId = Long.parseLong(request.getOwnerId());
         int limitPrice = request.getLimitPrice() != null ? request.getLimitPrice() : 0;
 
         Party party = Party.builder()
                 .title(request.getTitle())
                 .limitPeople(request.getLimitPeople())
                 .limitPrice(limitPrice)
-                .ownerId(ownerId)
+                .ownerId(request.getOwnerId())
                 .finishedAt(finishedAt)
                 .category(partyCategory)
                 .isOpen(true)
