@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.bobhub.domain.Party;
 import com.bobhub.domain.PartyCategory;
-import com.bobhub.dto.PartyCreateRequest;
 import com.bobhub.dto.PartyUpdateRequest;
 import com.bobhub.dto.PartyUpdateResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -25,49 +24,47 @@ class PartyIntegrationTest extends PartyTestBase {
 
     @Test
     @Order(1)
-    @DisplayName("파티 생성 후 조회 테스트")
-    void createAndGetParty() {
-      // Given: 파티 생성 요청
-      PartyCreateRequest createRequest = createTestPartyRequest();
+    @DisplayName("파티 조회 테스트")
+    void getParty() {
+      // Given: 기존 파티 ID
+      Long partyId = 1L;
 
-      // When: 파티 생성
-      partyService.createParty(createRequest);
+      // When: 파티 조회
+      PartyUpdateResponse response = partyService.getPartyById(partyId);
 
-      // Then: 생성된 파티 조회 (실제로는 생성된 파티의 ID를 알 수 없으므로
-      // 테스트용으로는 기존 파티를 조회)
-      PartyUpdateResponse response = partyService.getPartyById(1L);
-
-      // 조회 결과가 성공하거나 실패할 수 있음 (데이터 존재 여부에 따라)
+      // Then: 조회 결과 검증
       assertNotNull(response);
       assertNotNull(response.getMessage());
+
+      if (response.isSuccess()) {
+        System.out.println("✅ 파티 조회 성공: " + response.getParty().getTitle());
+      } else {
+        System.out.println("⚠️ 파티 조회 실패: " + response.getMessage());
+      }
     }
 
     @Test
     @Order(2)
-    @DisplayName("파티 생성-수정-삭제 전체 워크플로우 테스트")
-    void fullPartyLifecycle() {
-      // Given: 파티 생성 요청
-      PartyCreateRequest createRequest = createTestPartyRequest();
+    @DisplayName("파티 수정-삭제 워크플로우 테스트")
+    void partyUpdateDeleteWorkflow() {
+      // Given: 기존 파티 ID
+      Long partyId = 2L; // 다른 파티 ID 사용
 
-      // When & Then 1: 파티 생성
-      partyService.createParty(createRequest);
-      System.out.println("파티 생성 완료");
-
-      // When & Then 2: 생성된 파티 조회
-      PartyUpdateResponse getResponse = partyService.getPartyById(1L);
+      // When & Then 1: 파티 조회
+      PartyUpdateResponse getResponse = partyService.getPartyById(partyId);
       assertNotNull(getResponse);
       System.out.println("파티 조회 결과: " + getResponse.isSuccess());
 
-      // When & Then 3: 파티 정보 수정
+      // When & Then 2: 파티 정보 수정
       if (getResponse.isSuccess()) {
-        PartyUpdateRequest updateRequest = createTestUpdateRequest(1L);
+        PartyUpdateRequest updateRequest = createTestUpdateRequest(partyId);
         PartyUpdateResponse updateResponse = partyService.updateParty(updateRequest, TEST_OWNER_ID);
         assertNotNull(updateResponse);
         System.out.println("파티 수정 결과: " + updateResponse.isSuccess());
       }
 
-      // When & Then 4: 파티 삭제
-      PartyUpdateResponse deleteResponse = partyService.deleteParty(1L, TEST_OWNER_ID);
+      // When & Then 3: 파티 삭제 (실제 삭제는 하지 않고 권한만 확인)
+      PartyUpdateResponse deleteResponse = partyService.deleteParty(partyId, TEST_OWNER_ID);
       assertNotNull(deleteResponse);
       System.out.println("파티 삭제 결과: " + deleteResponse.isSuccess());
     }

@@ -14,10 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * PartyService 단위 테스트
- * 각 메서드의 기능을 개별적으로 테스트합니다.
- */
+/** PartyService 단위 테스트 각 메서드의 기능을 개별적으로 테스트합니다. */
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
