@@ -1,8 +1,6 @@
 package com.bobhub.domain;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 import lombok.*;
 
 @Getter

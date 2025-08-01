@@ -8,11 +8,11 @@ import lombok.Setter;
 @Setter
 @Builder
 public class PartyCreateRequest {
-    private String title;
-    private Integer limitPeople;
-    private Integer limitPrice;
-    private String finishedAt;
-    private String category;
-    private Long ownerId;
-    private Boolean isOpen;
+  private String title;
+  private Integer limitPeople;
+  private Integer limitPrice;
+  private String finishedAt;
+  private String category;
+  private Long ownerId;
+  private Boolean isOpen;
 }
