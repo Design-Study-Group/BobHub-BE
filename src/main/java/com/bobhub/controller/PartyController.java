@@ -101,6 +101,24 @@ public class PartyController {
     }
   }
 
+  @PostMapping("/delete/{partyId}")
+  public String deleteParty(@PathVariable Long partyId, Principal principal) {
+
+    // 사용자 ID 가져오기
+    Long userId = getUserIdFromPrincipal(principal);
+    if (userId == null) {
+      return "redirect:/parties?error=로그인이 필요합니다.";
+    }
+
+    PartyUpdateResponse response = partyService.deleteParty(partyId, userId);
+
+    if (response.isSuccess()) {
+      return "redirect:/parties?success=파티가 성공적으로 삭제되었습니다.";
+    } else {
+      return "redirect:/parties?error=" + response.getMessage();
+    }
+  }
+
   private Long getUserIdFromPrincipal(Principal principal) {
     if (principal == null) {
       return null;

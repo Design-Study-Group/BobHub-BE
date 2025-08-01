@@ -16,5 +16,7 @@ public interface PartyMapper {
 
   void updateParty(Party party);
 
+  void deleteParty(@Param("id") long id);
+
   boolean isPartyOwner(@Param("partyId") long partyId, @Param("userId") long userId);
 }
