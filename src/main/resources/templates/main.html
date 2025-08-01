@@ -1,103 +1,32 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
     <title>BobHub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=SUIT:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background-color: #fffaf3;
-            font-family: 'SUIT', sans-serif;
-            color: #3e2c1c;
-        }
-        h1 {
-            color: #d86c3f;
-        }
-        .btn-meal {
-            padding: 14px 24px;
-            font-size: 1.1rem;
-            border-radius: 14px;
-            font-weight: 600;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.08);
-            border: none;
-        }
-        .btn-main {
-            background-color: #d86c3f;
-            color: white;
-        }
-        .btn-sub1 {
-            background-color: #f2b66d;
-            color: #3e2c1c;
-        }
-        .btn-sub2 {
-            background-color: #c99e82;
-            color: white;
-        }
-        footer {
-            margin-top: 80px;
-            color: #998675;
-        }
-
-        /* 상단 로그인 영역 */
-        .top-right {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .top-right img {
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            object-fit: cover;
-        }
-
-        .top-right span {
-            font-weight: 600;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/document/css/layout.css}" />
+    <link rel="stylesheet" th:href="@{/document/css/main.css}" />
 </head>
 <body>
 
-<!-- 로그인 상태 표시 영역 (우측 상단 고정) -->
-<div class="top-right">
-    <!-- 로그인 안 된 경우 -->
-    <div sec:authorize="!isAuthenticated()">
-        <a href="/login" class="btn btn-outline-dark btn-sm">Login</a>
-    </div>
-
-    <!-- 로그인 된 경우 -->
-    <div sec:authorize="isAuthenticated()" class="d-flex align-items-center gap-2">
-        <img th:src="${#authentication.principal.attributes['picture']}" alt="프로필" />
-        <span th:text="${#authentication.principal.attributes['name']}">사용자 이름</span>
-        <form th:action="@{/logout}" method="post" style="display:inline">
-            <button type="submit" class="btn btn-outline-secondary btn-sm">Logout</button>
-        </form>
-    </div>
-</div>
+<!--헤더-->
+<div th:replace="~{fragments/header :: header}"></div>
 
 <!-- 본문 영역 -->
 <div class="container py-5 text-center">
-    <h1 class="mb-4 fw-bold">🍚 BobHub</h1>
-    <p class="lead mb-5 text-muted">점심 메뉴 추천, 배달팟 모으기, 도시락 공유까지!<br>든든한 한 끼를 책임져요 😋</p>
+    <h1 class="mb-4 fw-bold">BobHub</h1>
+    <p class="lead mb-5 text-muted">점심 메뉴 추천, 파티원 모으기, 도시락 공유까지!<br>든든한 한 끼를 책임져요</p>
 
     <div class="d-grid gap-3 col-10 col-md-6 mx-auto">
-        <a href="/menu" class="btn btn-meal btn-main">🍜 오늘 점심 뭐 먹지?</a>
-        <a href="/delivery" class="btn btn-meal btn-sub1">🚗 배달팟 참여하기</a>
-        <a href="/lunchbox" class="btn btn-meal btn-sub2">🥪 도시락 메뉴 추천</a>
-        <a href="/restaurants" class="btn btn-meal btn-sub1">🍽 강의장 근처 맛집</a>
+        <a href="/menu" class="btn btn-meal btn-main">오늘 점심 뭐 먹지?</a>
+        <a href="/parties" class="btn btn-meal btn-sub1">파티원 모집하기</a>
+        <a href="/restaurants" class="btn btn-meal btn-sub1">강의장 근처 맛집</a>
+        <a href="/mypage" class="btn btn-meal btn-sub2">마이페이지</a>
     </div>
 </div>
 
 <!-- 푸터 -->
-<footer class="text-center text-muted small">
-    &copy; 2025 BobHub. Made with 🍙 by FastCampus Bootcampers
-</footer>
-
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

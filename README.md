@@ -1,5 +1,44 @@
 # BobHub
 
+## 환경 설정
+
+### 프로필별 설정
+
+이 프로젝트는 환경별로 설정을 분리하여 관리합니다:
+
+- **개발 환경**: `dev` 프로필 사용
+- **프로덕션 환경**: `prod` 프로필 사용
+- **테스트 환경**: `test` 프로필 사용
+
+### 환경설정 파일명 및 파일 위치
+```bash
+src/
+├── main/
+│   └── resources/
+│       ├── application.yml          # 공통 환경 설정
+│       ├── application-dev.yml      # 개발 환경 설정
+│       ├── application-prod.yml     # 배포 환경 설정
+│
+├── test/
+│   └── resources/
+│       └── application-test.yml     # 테스트 환경 설정
+```
+
+### 환경별 실행 방법
+
+```bash
+# 개발 환경 실행
+./gradlew bootRun --args='--spring.profiles.active=dev'
+
+# 프로덕션 환경 실행
+./gradlew bootRun --args='--spring.profiles.active=prod'
+
+# 테스트 실행
+./gradlew test
+```
+
+---
+
 ## 키워드 (작업 내용 분류)
 
 | 태그      | 설명                                                       |

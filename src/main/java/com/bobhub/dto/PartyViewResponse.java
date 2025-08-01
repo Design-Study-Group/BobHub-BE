@@ -1,23 +1,23 @@
-package com.bobhub.domain;
+package com.bobhub.dto;
 
+import com.bobhub.domain.PartyCategory;
 import java.time.LocalDateTime;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
-@ToString
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class Party {
+public class PartyViewResponse {
   private long id;
   private PartyCategory category;
   private String title;
   private int limitPeople;
   private int limitPrice;
-  private long ownerId;
-  private long memberId;
+  private Long ownerId;
   private Boolean isOpen;
   private LocalDateTime createdAt;
   private LocalDateTime finishedAt;
+  private int currentPeople;
 }

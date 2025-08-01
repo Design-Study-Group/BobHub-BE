@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bobhub.mapper.PartyMapper">
+
+    <!-- resultMap 정의 -->
+    <resultMap id="PartyViewResultMap" type="com.bobhub.dto.PartyViewResponse">
+        <id property="id" column="id"/>
+        <result property="category" column="category" javaType="com.bobhub.domain.PartyCategory"/>
+        <result property="title" column="title"/>
+        <result property="limitPeople" column="limitPeople"/>
+        <result property="limitPrice" column="limitPrice"/>
+        <result property="ownerId" column="ownerId"/>
+        <result property="isOpen" column="isOpen" javaType="boolean"/>
+        <result property="createdAt" column="createdAt" javaType="java.time.LocalDateTime"/>
+        <result property="finishedAt" column="finishedAt" javaType="java.time.LocalDateTime"/>
+        <result property="currentPeople" column="currentPeople"/>
+    </resultMap>
+
+    <!-- 카테고리별 파티 목록 조회 -->
+    <select id="getPartiesByCategory" parameterType="string" resultMap="PartyViewResultMap">
+        SELECT
+            p.id,
+            p.category,
+            p.title,
+            p.limit_people AS limitPeople,
+            p.limit_price AS limitPrice,
+            p.owner_id AS ownerId,
+            p.is_open AS isOpen,
+            p.created_at AS createdAt,
+            p.finished_at AS finishedAt,
+            (SELECT COUNT(*) + 1 FROM partymember pm WHERE pm.party_id = p.id) AS currentPeople
+        FROM party p
+        WHERE p.category = #{category}
+        ORDER BY p.created_at DESC
+    </select>
+
+    <!-- 파티 생성 -->
+    <insert id="createParty" parameterType="com.bobhub.domain.Party" useGeneratedKeys="false" keyProperty="id">
+        INSERT INTO party (
+            title,
+            finished_at,
+            limit_people,
+            limit_price,
+            owner_id,
+            is_open,
+            category
+        )
+        VALUES (
+                   #{title},
+                   #{finishedAt},
+                   #{limitPeople},
+                   #{limitPrice},
+                   #{ownerId},
+                   #{isOpen},
+                   #{category}
+               )
+    </insert>
+
+    <!-- 파티 ID로 조회 -->
+    <select id="getPartyById" parameterType="long" resultType="com.bobhub.domain.Party">
+        SELECT
+            id,
+            category,
+            title,
+            limit_people AS limitPeople,
+            limit_price AS limitPrice,
+            owner_id AS ownerId,
+            member_id AS memberId,
+            is_open AS isOpen,
+            created_at AS createdAt,
+            finished_at AS finishedAt
+        FROM party
+        WHERE id = #{id}
+    </select>
+
+    <!-- 파티 정보 수정 -->
+    <update id="updateParty" parameterType="com.bobhub.domain.Party">
+        UPDATE party
+        SET
+            title = #{title},
+            category = #{category},
+            limit_people = #{limitPeople},
+            limit_price = #{limitPrice},
+            finished_at = #{finishedAt},
+            is_open = #{isOpen}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 파티 삭제 -->
+    <delete id="deleteParty" parameterType="long">
+        DELETE FROM party
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 파티 소유자 확인 -->
+    <select id="isPartyOwner" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM party
+        WHERE id = #{partyId} AND owner_id = #{userId}
+    </select>
+
+</mapper>
