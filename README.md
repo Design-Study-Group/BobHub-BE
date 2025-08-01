@@ -1,5 +1,56 @@
 # BobHub
 
+## 환경 설정
+
+### 프로필별 설정
+
+이 프로젝트는 환경별로 설정을 분리하여 관리합니다:
+
+- **개발 환경**: `dev` 프로필 사용
+- **프로덕션 환경**: `prod` 프로필 사용
+- **테스트 환경**: `test` 프로필 사용
+
+### 환경별 실행 방법
+
+```bash
+# 개발 환경 실행
+./gradlew bootRun --args='--spring.profiles.active=dev'
+
+# 프로덕션 환경 실행
+./gradlew bootRun --args='--spring.profiles.active=prod'
+
+# 테스트 실행
+./gradlew test
+```
+
+### 환경 변수 설정
+
+#### 개발 환경 (application-dev.yml)
+- **데이터베이스**: `jdbc:mysql://localhost:3306/bobhub_dev`
+- **OAuth 리다이렉트**: `http://localhost:8080/login/oauth2/code/google`
+- **로깅 레벨**: DEBUG
+
+#### 프로덕션 환경 (application-prod.yml)
+- **데이터베이스**: 환경 변수로 설정
+- **OAuth 리다이렉트**: `https://developlee20.store/login/oauth2/code/google`
+- **로깅 레벨**: INFO
+
+### 필요한 환경 변수
+
+```bash
+# 데이터베이스 설정
+SPRING_DATASOURCE_URL=jdbc:mysql://your-db-host:3306/your-db-name
+SPRING_DATASOURCE_USERNAME=your-username
+SPRING_DATASOURCE_PASSWORD=your-password
+SPRING_DATASOURCE_DRIVER=com.mysql.cj.jdbc.Driver
+
+# Google OAuth 설정
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+```
+
+---
+
 ## 키워드 (작업 내용 분류)
 
 | 태그      | 설명                                                       |
