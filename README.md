@@ -10,6 +10,20 @@
 - **프로덕션 환경**: `prod` 프로필 사용
 - **테스트 환경**: `test` 프로필 사용
 
+### 환경설정 파일명 및 파일 위치
+```bash
+src/
+├── main/
+│   └── resources/
+│       ├── application.yml          # 공통 환경 설정
+│       ├── application-dev.yml      # 개발 환경 설정
+│       ├── application-prod.yml     # 배포 환경 설정
+│
+├── test/
+│   └── resources/
+│       └── application-test.yml     # 테스트 환경 설정
+```
+
 ### 환경별 실행 방법
 
 ```bash
@@ -21,32 +35,6 @@
 
 # 테스트 실행
 ./gradlew test
-```
-
-### 환경 변수 설정
-
-#### 개발 환경 (application-dev.yml)
-- **데이터베이스**: `jdbc:mysql://localhost:3306/bobhub_dev`
-- **OAuth 리다이렉트**: `http://localhost:8080/login/oauth2/code/google`
-- **로깅 레벨**: DEBUG
-
-#### 프로덕션 환경 (application-prod.yml)
-- **데이터베이스**: 환경 변수로 설정
-- **OAuth 리다이렉트**: `https://developlee20.store/login/oauth2/code/google`
-- **로깅 레벨**: INFO
-
-### 필요한 환경 변수
-
-```bash
-# 데이터베이스 설정
-SPRING_DATASOURCE_URL=jdbc:mysql://your-db-host:3306/your-db-name
-SPRING_DATASOURCE_USERNAME=your-username
-SPRING_DATASOURCE_PASSWORD=your-password
-SPRING_DATASOURCE_DRIVER=com.mysql.cj.jdbc.Driver
-
-# Google OAuth 설정
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
 ```
 
 ---
