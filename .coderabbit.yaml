@@ -2,12 +2,6 @@ language: 'ko-KR'
 reviews:
   auto_review:
     enabled: true              # 모든 PR을 자동 리뷰
-    draft_prs: false           # Draft PR 제외
-    min_lines_of_code: 10       # 너무 짧은 코드에 대해서는 리뷰 안 함
-    ignore_files:
-      - "docs/**"
-      - "*.md"
-    ignore_large_prs: true     # 너무 큰 PR은 리뷰하지 않기
 
   behavior:
     explain_code_complexity: true  # 코드의 복잡도를 같이 설명
