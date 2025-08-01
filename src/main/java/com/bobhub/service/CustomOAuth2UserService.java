@@ -42,6 +42,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     return new DefaultOAuth2User(
-        Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")), attributes, "name");
+        Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")), attributes, "email");
   }
 }
