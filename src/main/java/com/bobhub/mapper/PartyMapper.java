@@ -2,13 +2,19 @@ package com.bobhub.mapper;
 
 import com.bobhub.domain.Party;
 import com.bobhub.dto.PartyViewResponse;
+import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
 @Mapper
 public interface PartyMapper {
-    List<PartyViewResponse> getPartiesByCategory(@Param("category") String category);
-    void createParty(Party party);
+  List<PartyViewResponse> getPartiesByCategory(@Param("category") String category);
+
+  void createParty(Party party);
+
+  Party getPartyById(@Param("id") long id);
+
+  void updateParty(Party party);
+
+  boolean isPartyOwner(@Param("partyId") long partyId, @Param("userId") long userId);
 }

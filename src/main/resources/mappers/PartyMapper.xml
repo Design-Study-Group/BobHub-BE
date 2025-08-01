@@ -59,4 +59,41 @@
                )
     </insert>
 
+    <!-- 파티 ID로 조회 -->
+    <select id="getPartyById" parameterType="long" resultType="com.bobhub.domain.Party">
+        SELECT
+            id,
+            category,
+            title,
+            limit_people AS limitPeople,
+            limit_price AS limitPrice,
+            owner_id AS ownerId,
+            member_id AS memberId,
+            is_open AS isOpen,
+            created_at AS createdAt,
+            finished_at AS finishedAt
+        FROM party
+        WHERE id = #{id}
+    </select>
+
+    <!-- 파티 정보 수정 -->
+    <update id="updateParty" parameterType="com.bobhub.domain.Party">
+        UPDATE party
+        SET
+            title = #{title},
+            category = #{category},
+            limit_people = #{limitPeople},
+            limit_price = #{limitPrice},
+            finished_at = #{finishedAt},
+            is_open = #{isOpen}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 파티 소유자 확인 -->
+    <select id="isPartyOwner" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM party
+        WHERE id = #{partyId} AND owner_id = #{userId}
+    </select>
+
 </mapper>
