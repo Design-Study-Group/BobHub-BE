@@ -127,6 +127,29 @@ public class PartyService {
     }
   }
 
+  /* 파티글 삭제 */
+  @Transactional
+  public PartyUpdateResponse deleteParty(Long partyId, Long userId) {
+    try {
+      // 파티 존재 여부 확인
+      Party existingParty = partyMapper.getPartyById(partyId);
+      if (existingParty == null) {
+        return PartyUpdateResponse.builder().message("파티를 찾을 수 없습니다.").success(false).build();
+      }
+
+      // 파티 소유자 확인
+      if (!partyMapper.isPartyOwner(partyId, userId)) {
+        return PartyUpdateResponse.builder().message("파티를 삭제할 권한이 없습니다.").success(false).build();
+      }
+
+      partyMapper.deleteParty(partyId);
+
+      return PartyUpdateResponse.builder().message("파티를 성공적으로 삭제했습니다.").success(true).build();
+    } catch (Exception e) {
+      return PartyUpdateResponse.builder().message("파티 삭제 중 오류가 발생했습니다.").success(false).build();
+    }
+  }
+
   /* 파티 소유자 확인 */
   public boolean isPartyOwner(Long partyId, Long userId) {
     return partyMapper.isPartyOwner(partyId, userId);

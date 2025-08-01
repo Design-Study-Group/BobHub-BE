@@ -89,6 +89,12 @@
         WHERE id = #{id}
     </update>
 
+    <!-- 파티 삭제 -->
+    <delete id="deleteParty" parameterType="long">
+        DELETE FROM party
+        WHERE id = #{id}
+    </delete>
+
     <!-- 파티 소유자 확인 -->
     <select id="isPartyOwner" resultType="boolean">
         SELECT COUNT(*) > 0
