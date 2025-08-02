@@ -56,13 +56,13 @@
         <table class="table table-hover text-center align-middle">
             <thead>
             <tr>
-                <th>파티 ID</th>
+<!--                <th>파티 ID</th>-->
                 <th>카테고리</th>
                 <th>제목</th>
                 <th>모집 인원</th>
                 <th>현재 인원</th>
                 <th>최소 주문금액</th>
-                <th>파티장 ID</th>
+<!--                <th>파티장 ID</th>-->
                 <th>상태</th>
                 <th>생성일</th>
                 <th>종료일</th>
@@ -70,13 +70,13 @@
             </thead>
             <tbody>
             <tr th:each="party : ${parties}">
-                <td th:text="${party.id}"></td>
+<!--                <td th:text="${party.id}"></td>-->
                 <td th:text="${party.category}"></td>
                 <td th:text="${party.title}"></td>
                 <td th:text="${party.limitPeople}"></td>
                 <td th:text="${party.currentPeople}"></td>
-                <td th:text="${party.limitPrice}"></td>
-                <td th:text="${party.ownerId}"></td>
+                <td th:text="${#numbers.formatInteger(party.limitPrice, 3, 'COMMA')}"></td>
+<!--                <td th:text="${party.ownerId}"></td>-->
                 <td>
                     <span th:classappend="${party.isOpen} ? 'badge badge-open' : 'badge badge-closed'"
                           th:text="${party.isOpen} ? '진행중' : '마감'">
