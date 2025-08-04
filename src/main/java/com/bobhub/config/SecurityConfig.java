@@ -25,8 +25,8 @@ public class SecurityConfig {
             oauth2 ->
                 oauth2
                     .loginPage("/login")
-                    .defaultSuccessUrl("/", true)
-                    .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService)))
+                    .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                    .defaultSuccessUrl("/", true))
         .logout(
             logout ->
                 logout
