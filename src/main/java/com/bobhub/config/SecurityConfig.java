@@ -16,7 +16,8 @@ public class SecurityConfig {
       HttpSecurity http, CustomOAuth2UserService customOAuth2UserService) throws Exception {
     http.authorizeHttpRequests(
             auth ->
-                auth.requestMatchers("/", "/login", "/css/**", "/images/**")
+                auth.requestMatchers(
+                        "/", "/login", "/document/**", "/css/**", "/images/**", "/js/**")
                     .permitAll()
                     .anyRequest()
                     .authenticated())
@@ -24,8 +25,8 @@ public class SecurityConfig {
             oauth2 ->
                 oauth2
                     .loginPage("/login")
-                    .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                    .defaultSuccessUrl("/", true))
+                    .defaultSuccessUrl("/", true)
+                    .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService)))
         .logout(
             logout ->
                 logout
