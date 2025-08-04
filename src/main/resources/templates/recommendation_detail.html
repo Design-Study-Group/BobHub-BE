@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 상세보기</title>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f1f3f5;
+            width: 120px;
+        }
+
+        /* 게시글 내용 */
+        .board-content-wrapper {
+            padding: 0;
+            border: none;
+        }
+
+        .board-content {
+            padding: 16px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            min-height: 150px;
+            word-break: break-word;
+        }
+
+        /* 버튼 그룹 */
+        .button-group {
+            text-align: right;
+            margin-bottom: 40px;
+        }
+
+        .button-group button {
+            margin-left: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button-group button:hover {
+            background-color: #45a049;
+        }
+
+        /* 댓글 입력창 */
+        #comment_write {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+        }
+
+        #commentWriter {
+            width: 20%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #commentContents {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #comment-write-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #comment-write-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* 댓글 테이블 */
+        #comment-list table {
+            table-layout: fixed;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        /* 댓글 테이블 행 높이 통일 */
+        #comment-list th,
+        #comment-list td {
+            min-height: 60px; /* 높이 통일 */
+            padding: 16px;
+            font-size: 14px;
+            vertical-align: middle; /* 수직 가운데 정렬 */
+            text-align: left;
+            word-break: break-word;
+            line-height: 1.6;
+        }
+
+        #comment-list th {
+            background-color: #f1f3f5;
+        }
+
+        /* 칼럼 비율 */
+        #comment-list th:nth-child(1),
+        #comment-list td:nth-child(1) { width: 10%; }
+        #comment-list th:nth-child(2),
+        #comment-list td:nth-child(2) { width: 15%; }
+        #comment-list th:nth-child(3),
+        #comment-list td:nth-child(3) { width: 55%; }
+        #comment-list th:nth-child(4),
+        #comment-list td:nth-child(4) { width: 20%; }
+
+        .comment-content-cell {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>게시글 상세보기</h2>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <td th:text="${recommendation.id}"></td>
+        </tr>
+        <tr>
+            <th>제목</th>
+            <td th:text="${recommendation.storeName}"></td>
+        </tr>
+        <tr>
+            <th>별점</th>
+            <td th:text="${recommendation.star}"></td>
+        </tr>
+        <tr>
+            <th>소요시간</th>
+            <td th:text="${recommendation.totalTime + ' 분'}"></td>
+        </tr>
+        <tr>
+            <th>인당가격</th>
+            <td th:text="${recommendation.pricePerPerson + ' 원'}"></td>
+        </tr>
+        <tr>
+            <th>예약</th>
+            <td th:text="${recommendation.isReservation} ? '가능' : '불가' "></td>
+        </tr>
+    </table>
+
+    <div class="button-group">
+        <button onclick="listReq()">목록</button>
+        <button onclick="updateReq()">수정</button>
+        <button onclick="deleteReq()">삭제</button>
+    </div>
+
+    <!-- 댓글 작성 -->
+<!--    <div id="comment_write">-->
+<!--        <input type="text" id="commentWriter" placeholder="작성자">-->
+<!--        <input type="text" id="commentContents" placeholder="내용">-->
+<!--        <button id="comment-write-btn" onclick="commentWrite()">댓글작성</button>-->
+<!--    </div>-->
+
+    <!-- 댓글 리스트 -->
+<!--    <div id="comment-list">-->
+<!--        <table>-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th>댓글번호</th>-->
+<!--                <th>작성자</th>-->
+<!--                <th>내용</th>-->
+<!--                <th>작성시간</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody id="comment-tbody">-->
+<!--            <tr th:each="comment : ${commentDtoList}">-->
+<!--                <td th:text="${comment.id}"></td>-->
+<!--                <td th:text="${comment.commentWriter}"></td>-->
+<!--                <td class="comment-content-cell" th:text="${comment.commentContents}"></td>-->
+<!--                <td th:text="${#temporals.format(comment.commentCreatedAt, 'yyyy.MM.dd HH:mm')}"></td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+</div>
+
+<!-- JavaScript for 버튼 동작 및 AJAX 댓글 작성 -->
+
+<script th:inline="javascript">
+
+    const listReq = () => {
+        location.href = "/recommendation/list";
+    };
+
+    const updateReq = () => {
+        location.href = `/recommendation/update/[[${recommendation.id}]]`;
+    };
+
+    const deleteReq = () => {
+        location.href = `/recommendation/delete/[[${recommendation.id}]]`;
+    };
+
+</script>
+
+</body>
+</html>
