@@ -25,15 +25,13 @@ public class RecommendationController {
   @PostMapping("/recommendation/save")
   // @ModelAttribute 매개 변수 앞에 선언 가능하지만 안해도 상관 없음
   public String save(Recommendation recommendation) {
-    //        System.out.println("isReservation = " + recommendation.isReservation());
     recommendationService.save(recommendation);
     return "redirect:/recommendation/list";
   }
 
-  @GetMapping("/recommendation/list")
+  @GetMapping("/recommendation")
   public String findAll(Model model) {
     List<Recommendation> recommendationList = recommendationService.findAll();
-    //        System.out.println("recommendationList = " + recommendationList);
     model.addAttribute("recommendationList", recommendationList);
     return "recommendation_list";
   }
@@ -45,7 +43,6 @@ public class RecommendationController {
 
     // 상세내용 가져옴
     Recommendation recommendation = recommendationService.findById(id);
-    System.out.println("recommendation = " + recommendation);
     model.addAttribute("recommendation", recommendation);
 
     //        List<CommentDto> commentDtoList = commentService.findAll(id);
