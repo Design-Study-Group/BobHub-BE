@@ -2,6 +2,7 @@ package com.bobhub.domain;
 
 import lombok.*;
 
+
 @Getter
 @Setter
 @ToString
@@ -11,9 +12,9 @@ import lombok.*;
 public class Recommendation {
   private long id;
   private String storeName;
-  private int star;
-  private int totalTime;
-  private int pricePerPerson;
+  private Integer star;
+  private Integer totalTime;
+  private Integer pricePerPerson;
   private boolean isReservation;
 
   public void setIsReservation(boolean isReservation) {

@@ -103,13 +103,13 @@
         <input type="text" id="storeName" name="storeName" placeholder="상호명을 입력하세요">
 
         <label for="star">별점 (1~5)</label>
-        <input type="number" id="star" name="star" min="1" max="5" step="1" placeholder="1~5 숫자만 입력하세요" required>
+        <input type="number" id="star" name="star" min="1" max="5" step="1" placeholder="1~5 숫자만 입력하세요" required oninput="this.value=this.value.replace(/[^0-9]/g,'');" inputmode="numeric">
 
         <label for="totalTime">소요시간 (분)</label>
-        <input type="number" id="totalTime" name="totalTime" placeholder="소요시간을 입력하세요">
+        <input type="number" id="totalTime" name="totalTime" min="1" step="1" placeholder="소요시간을 입력하세요" required oninput="this.value=this.value.replace(/[^0-9]/g,'');" inputmode="numeric">
 
         <label for="pricePerPerson">인당 가격 (원)</label>
-        <input type="number" id="pricePerPerson" name="pricePerPerson" placeholder="인당 가격을 입력하세요">
+        <input type="number" id="pricePerPerson" name="pricePerPerson" min="1" step="1" placeholder="인당 가격을 입력하세요" required oninput="this.value=this.value.replace(/[^0-9]/g,'');" inputmode="numeric">
 
         <label for="isReservation">예약 여부</label>
         <select id="isReservation" name="isReservation">

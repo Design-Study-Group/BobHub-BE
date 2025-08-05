@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -24,7 +25,12 @@ public class RecommendationController {
 
   @PostMapping("/recommendation/save")
   // @ModelAttribute 매개 변수 앞에 선언 가능하지만 안해도 상관 없음
-  public String save(Recommendation recommendation) {
+  public String save(Recommendation recommendation, BindingResult bindingResult) {
+    if (bindingResult.hasErrors()) {
+      // 유효성 오류가 있으면 작성 폼으로 되돌아감
+      return "recommendation/save";  // 실제 작성 폼 뷰 이름으로 조정
+    }
+
     recommendationService.save(recommendation);
     return "redirect:/recommendation";
   }
