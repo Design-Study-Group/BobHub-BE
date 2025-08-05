@@ -12,9 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/parties")
@@ -43,9 +43,7 @@ public class PartyController {
 
   @PostMapping("/create")
   public String createParties(
-      Principal principal,
-      @ModelAttribute PartyCreateRequest request,
-      Model model) {
+      Principal principal, @ModelAttribute PartyCreateRequest request, Model model) {
     String email = null;
     if (principal instanceof OAuth2AuthenticationToken) {
       OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) principal;
@@ -70,7 +68,8 @@ public class PartyController {
       }
       limitPeopleInt = (int) doubleValue;
     } catch (Exception e) {
-      model.addAttribute("errors", List.of(new ObjectError("limitPeople", "최대 인원 수는 정수만 입력할 수 있습니다.")));
+      model.addAttribute(
+          "errors", List.of(new ObjectError("limitPeople", "최대 인원 수는 정수만 입력할 수 있습니다.")));
       return "parties";
     }
     // 파티 생성 서비스에 int로 넘기기 위해 setter 추가 필요시 수정

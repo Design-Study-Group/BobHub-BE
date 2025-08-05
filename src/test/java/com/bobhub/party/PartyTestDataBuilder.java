@@ -77,7 +77,7 @@ public class PartyTestDataBuilder {
       return PartyCreateRequest.builder()
           .category(category)
           .title(title)
-          .limitPeople(limitPeople)
+          .limitPeople(String.valueOf(limitPeople))
           .limitPrice(limitPrice)
           .ownerId(ownerId)
           .isOpen(isOpen)
