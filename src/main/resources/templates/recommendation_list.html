@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 목록</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        th:nth-child(2), td:nth-child(2) {
+            width: 50%;
+            text-align: left;
+            padding-left: 16px;
+        }
+        th:nth-child(4), td:nth-child(4) {
+            width: 15%;
+        }
+        th:nth-child(5), td:nth-child(5) {
+            width: 10%;
+        }
+
+        a.ellipsis {
+            display: inline-block;
+            max-width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            vertical-align: bottom;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 30px 0 0 0;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .pagination li {
+            display: inline-block;
+        }
+
+        .pagination a, .pagination span {
+            color: #007bff;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 4px;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .pagination .active span {
+            background: #007bff;
+            color: #fff;
+        }
+
+        .pagination .disabled span {
+            color: #aaa;
+        }
+
+        .write-button-wrapper {
+            margin-top: 40px;
+            text-align: right; /* 또는 center로 가운데 정렬 */
+        }
+
+        .write-button {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #4CAF50; /* 녹색 계열로 통일 */
+            color: white;
+            padding: 10px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .write-button:hover {
+            background-color: #45a049; /* 진한 녹색으로 hover 효과 */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <table>
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>상호명</th>
+            <th>별점</th>
+            <th>소요시간</th>
+            <th>인당가격</th>
+            <th>예약가능</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="recommendation, iterStat : ${recommendationList}">
+            <td th:text="${iterStat.count}">1</td>
+            <td>
+<!--                <a th:href="@{/${recommendation.id}}" th:text="${recommendation.storeName}"></a>-->
+                <a th:href="@{/recommendation/{id}(id=${recommendation.id})}" th:text="${recommendation.storeName}"></a>
+
+            </td>
+            <td th:text="${recommendation.star}"></td>
+            <td th:text="${recommendation.totalTime + ' 분'}"></td>
+            <td th:text="${recommendation.pricePerPerson + ' 원'}"></td>
+            <td th:text="${recommendation.isReservation ? '가능' : '불가능'}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <!-- 글쓰기 버튼 위치 -->
+    <div class="write-button-wrapper">
+        <a class="write-button" href="/recommendation/save">글쓰기</a>
+    </div>
+</div>
+</body>
+</html>
