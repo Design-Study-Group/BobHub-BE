@@ -9,7 +9,7 @@ import lombok.Setter;
 @Builder
 public class PartyCreateRequest {
   private String title;
-  private Integer limitPeople;
+  private String limitPeople;
   private Integer limitPrice;
   private String finishedAt;
   private String category;

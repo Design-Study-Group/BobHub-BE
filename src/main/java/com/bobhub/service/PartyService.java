@@ -45,7 +45,7 @@ public class PartyService {
     Party party =
         Party.builder()
             .title(request.getTitle())
-            .limitPeople(request.getLimitPeople())
+            .limitPeople(Integer.parseInt(request.getLimitPeople()))
             .limitPrice(limitPrice)
             .ownerId(request.getOwnerId())
             .finishedAt(finishedAt)
