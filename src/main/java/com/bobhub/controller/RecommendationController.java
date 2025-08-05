@@ -26,7 +26,7 @@ public class RecommendationController {
   // @ModelAttribute 매개 변수 앞에 선언 가능하지만 안해도 상관 없음
   public String save(Recommendation recommendation) {
     recommendationService.save(recommendation);
-    return "redirect:/recommendation/list";
+    return "redirect:/recommendation";
   }
 
   @GetMapping("/recommendation")
@@ -53,7 +53,7 @@ public class RecommendationController {
   @PostMapping("/recommendation/update")
   public String update(@ModelAttribute Recommendation recommendation) {
     recommendationService.update(recommendation);
-    return "redirect:/recommendation/list";
+    return "redirect:/recommendation";
   }
 
   @GetMapping("/recommendation/update/{id}")
@@ -66,6 +66,6 @@ public class RecommendationController {
   @GetMapping("/recommendation/delete/{id}")
   public String delete(@PathVariable("id") Long id) {
     recommendationService.delete(id);
-    return "redirect:/recommendation/list";
+    return "redirect:/recommendation";
   }
 }
