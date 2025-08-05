@@ -11,9 +11,9 @@ import lombok.*;
 public class Recommendation {
   private long id;
   private String storeName;
-  private Integer star;
-  private Integer totalTime;
-  private Integer pricePerPerson;
+  private int star;
+  private int totalTime;
+  private int pricePerPerson;
   private boolean isReservation;
 
   public void setIsReservation(boolean isReservation) {
