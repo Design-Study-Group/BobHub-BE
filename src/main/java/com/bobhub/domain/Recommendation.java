@@ -2,7 +2,6 @@ package com.bobhub.domain;
 
 import lombok.*;
 
-
 @Getter
 @Setter
 @ToString
