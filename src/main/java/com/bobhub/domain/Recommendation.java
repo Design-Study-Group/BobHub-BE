@@ -15,4 +15,8 @@ public class Recommendation {
   private int totalTime;
   private int pricePerPerson;
   private boolean isReservation;
+
+  public void setIsReservation(boolean isReservation) {
+    this.isReservation = isReservation;
+  }
 }
