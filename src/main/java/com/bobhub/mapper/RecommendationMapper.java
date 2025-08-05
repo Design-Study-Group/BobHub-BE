@@ -6,13 +6,13 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface RecommendationMapper {
-    void insert(Recommendation recommendation);
+  void insert(Recommendation recommendation);
 
-    List<Recommendation> findAll();
+  List<Recommendation> findAll();
 
-    Recommendation findById(Long id);
+  Recommendation findById(Long id);
 
-    void update(Recommendation recommendation);
+  void update(Recommendation recommendation);
 
-    void delete(Long id);
+  void delete(Long id);
 }
