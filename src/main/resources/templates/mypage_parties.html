@@ -84,7 +84,7 @@
             <tbody>
             <tr th:each="party : ${parties}">
 <!--                <td th:text="${party.id}"></td>-->
-                <td th:text="${party.category}"></td>
+                <td th:text="${party.category.krName}"></td>
                 <td th:text="${party.title}"></td>
                 <td th:text="${party.limitPeople}"></td>
                 <td th:text="${party.currentPeople != 0 ? party.currentPeople : '-'}"></td>
