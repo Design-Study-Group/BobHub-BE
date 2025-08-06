@@ -36,7 +36,7 @@
         <li th:each="party : ${parties}"
             th:if="${party.finishedAt.isAfter(T(java.time.LocalDateTime).now())}"
             class="party-card">
-            <a th:href="@{'/parties/' + ${party.id}}" class="card-link">
+            <a th:href="@{'/parties/' + ${party.id} + '/comments'}" class="card-link">
                 <h5 th:text="${party.title}">파티 제목</h5>
                 <p>
                     참여 인원:

@@ -44,7 +44,7 @@ public abstract class PartyTestBase {
     return PartyCreateRequest.builder()
         .category("DELIVERY")
         .title("테스트 파티")
-        .limitPeople(4)
+        .limitPeople(String.valueOf(4))
         .limitPrice(30000)
         .ownerId(TEST_OWNER_ID)
         .isOpen(true)

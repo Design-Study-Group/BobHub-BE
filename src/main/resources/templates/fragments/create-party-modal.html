@@ -11,26 +11,38 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
                     </div>
                     <div class="modal-body pt-0">
+                        <!-- 에러 메시지 표시 -->
+                        <div th:if="${errors}" class="alert alert-danger" style="white-space:pre-line;">
+                            <ul style="margin-bottom:0;">
+                                <li th:each="err : ${errors}" th:text="${err.defaultMessage}"></li>
+                            </ul>
+                        </div>
                         <div class="row g-3">
                             <div class="col-12">
                                 <label class="form-label">파티 제목</label>
-                                <input type="text" class="form-control" name="title" required />
+                                <input type="text" class="form-control" name="title"
+                                       pattern=".{5,30}" required
+                                       title="5자 이상 30자 이하로 입력해주세요." />
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">최대 인원 수</label>
-                                <input type="number" class="form-control" name="limitPeople" required />
+                                <input type="number" class="form-control" name="limitPeople"
+                                       id="limitPeople" min="1" max="60" required />
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">최소 주문 금액</label>
-                                <input type="number" class="form-control" name="limitPrice" placeholder="선택 사항" />
+                                <input type="number" class="form-control" name="limitPrice"
+                                       min="0" placeholder="선택 사항" />
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">마감 시간</label>
-                                <input type="datetime-local" class="form-control" name="finishedAt" required />
+                                <input type="datetime-local" class="form-control" name="finishedAt"
+                                       id="finishedAt" required />
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">파티 종류</label>
-                                <select class="form-select" name="category">
+                                <select class="form-select" name="category" required>
+                                    <option value="">-- 선택 --</option>
                                     <option value="DELIVERY">배달</option>
                                     <option value="DINE_OUT">외식</option>
                                     <option value="LUNCHBOX">도시락</option>
@@ -48,3 +60,30 @@
         </div>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const limitPeopleInput = document.getElementById('limitPeople');
+    if (limitPeopleInput) {
+        limitPeopleInput.addEventListener('input', function(e) {
+            let value = e.target.value;
+            // 끝이 .0인 경우 정수로 변환
+            if (/^\d+\.0+$/.test(value)) {
+                value = value.replace(/\.0+$/, '');
+                e.target.value = value;
+            }
+            // 정수만 허용 (0 또는 1 이상의 정수만 통과)
+            if (value && (!/^(0|[1-9]\d*)$/.test(value))) {
+                alert('최대 인원 수는 정수만 입력할 수 있습니다.');
+                e.target.value = '';
+                e.target.focus();
+            }
+        });
+        // 소수점, e, -, + 입력 자체를 막기
+        limitPeopleInput.addEventListener('keydown', function(e) {
+            if (e.key === '.' || e.key === 'e' || e.key === '-' || e.key === '+') {
+                e.preventDefault();
+            }
+        });
+    }
+});
+</script>

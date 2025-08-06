@@ -45,7 +45,6 @@ public class CommentController {
     comment.setWriterId(user.getId());
     comment.setPartyId(partyId);
 
-    System.out.println(comment.getComments());
     commentService.addComment(comment);
     return "redirect:/parties/" + partyId + "/comments";
   }
