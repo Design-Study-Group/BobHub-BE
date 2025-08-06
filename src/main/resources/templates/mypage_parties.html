@@ -75,7 +75,9 @@
                 <td th:text="${party.title}"></td>
                 <td th:text="${party.limitPeople}"></td>
                 <td th:text="${party.currentPeople}"></td>
-                <td th:text="${#numbers.formatInteger(party.limitPrice, 3, 'COMMA')}"></td>
+                <td th:text="${party.limitPrice != 0
+                    ? #numbers.formatInteger(party.limitPrice, 3, 'COMMA')
+                    : '-'}"></td>
 <!--                <td th:text="${party.ownerId}"></td>-->
                 <td>
                     <span th:classappend="${party.isOpen} ? 'badge badge-open' : 'badge badge-closed'"
