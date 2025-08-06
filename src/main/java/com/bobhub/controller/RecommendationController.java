@@ -23,7 +23,6 @@ public class RecommendationController {
   }
 
   @PostMapping("/recommendation/save")
-  // @ModelAttribute 매개 변수 앞에 선언 가능하지만 안해도 상관 없음
   public String save(Recommendation recommendation) {
     recommendationService.save(recommendation);
     return "redirect:/recommendation";
