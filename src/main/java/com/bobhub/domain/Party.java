@@ -20,4 +20,5 @@ public class Party {
   private Boolean isOpen;
   private LocalDateTime createdAt;
   private LocalDateTime finishedAt;
+  private int currentPeople;
 }

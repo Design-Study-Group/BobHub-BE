@@ -14,6 +14,8 @@ public interface PartyMapper {
 
   Party getPartyById(@Param("id") long id);
 
+  List<Party> getPartiesById(@Param("id") long id);
+
   void updateParty(Party party);
 
   void deleteParty(@Param("id") long id);
