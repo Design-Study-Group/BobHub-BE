@@ -1,14 +1,11 @@
 package com.bobhub.service;
 
 import com.bobhub.domain.Party;
-import com.bobhub.domain.PartyCategory;
 import com.bobhub.domain.PartyMember;
 import com.bobhub.domain.User;
 import com.bobhub.mapper.PartyMapper;
 import com.bobhub.mapper.PartyMemberMapper;
 import com.bobhub.mapper.UserMapper;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +34,7 @@ public class MypageService {
     User user = userMapper.findByEmail(email);
 
     List<Party> parties = new ArrayList<>();
-    for(PartyMember partyMember : partyMemberMapper.findByUserId(user.getId())){
+    for (PartyMember partyMember : partyMemberMapper.findByUserId(user.getId())) {
       parties.add(partyMapper.getPartyById(partyMember.getId()));
     }
 

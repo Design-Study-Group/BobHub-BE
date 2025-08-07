@@ -1,13 +1,9 @@
 package com.bobhub.controller;
 
 import com.bobhub.domain.Party;
-import com.bobhub.domain.PartyCategory;
 import com.bobhub.log.AllLogger;
 import com.bobhub.service.MypageService;
-
-import java.time.LocalDateTime;
 import java.util.List;
-
 import lombok.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -30,14 +26,17 @@ public class MypageController {
   }
 
   @GetMapping("/parties")
-  public String mypage_parties(@RequestParam(defaultValue = "my") String category, @AuthenticationPrincipal OAuth2User oAuth2User, Model model) {
+  public String mypage_parties(
+      @RequestParam(defaultValue = "my") String category,
+      @AuthenticationPrincipal OAuth2User oAuth2User,
+      Model model) {
     List<Party> parties;
 
-    if("my".equals(category)){
+    if ("my".equals(category)) {
       parties = mypageService.getPartiesByOAuth(oAuth2User);
-    } else if("your".equals(category)){
+    } else if ("your".equals(category)) {
       parties = mypageService.getMyParticipantPartiesByOAuth(oAuth2User);
-    } else{
+    } else {
       parties = List.of();
     }
 
