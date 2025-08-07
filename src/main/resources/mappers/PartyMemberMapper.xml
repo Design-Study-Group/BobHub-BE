@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bobhub.mapper.PartyMemberMapper">
+    <resultMap id="partymemberResultMap" type="com.bobhub.domain.PartyMember">
+        <id property="id" column="ID"/>
+        <result property="partyId" column="PARTY_ID"/>
+        <result property="userId" column="USER_ID"/>
+    </resultMap>
+
+    <select id="findByUserId" resultMap="partymemberResultMap">
+        SELECT *
+        FROM PARTYMEMBER
+        WHERE USER_ID = #{userId}
+    </select>
+</mapper>
