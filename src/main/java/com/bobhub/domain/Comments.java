@@ -13,6 +13,7 @@ public class Comments {
   private long id;
   private long partyId;
   private long writerId;
+  private String name;
   private String comments;
   Date createdAt;
 }

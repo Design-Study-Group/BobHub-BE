@@ -1,0 +1,162 @@
+/* 배경색 및 기본 폰트 */
+body {
+    background-color: #fffaf3;
+    font-family: 'SUIT', sans-serif;
+    color: #3e2c1c;
+    padding-top: 40px; /* 헤더 높이만큼 공간 확보 */
+}
+
+/* 제목 */
+.page-title {
+    font-size: 2rem;
+    color: #d86c3f;
+    font-weight: bold;
+    margin: 10px auto;
+}
+
+/* 탭 메뉴 */
+.tab-menu .tab {
+    padding: 8px 18px;
+    border-radius: 30px;
+    border: 1px solid #d86c3f;
+    color: #d86c3f;
+    margin-right: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+    background-color: transparent;
+}
+
+.tab-menu .tab.active,
+.tab-menu .tab:hover {
+    background-color: #d86c3f;
+    color: white;
+}
+
+/* 글쓰기 버튼 - 더 진한 주황색 */
+.btn-write {
+    background-color: #f87437;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-write:hover {
+    background-color: #9f3f14;
+}
+
+/* 카드 링크 */
+.card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+}
+
+/* 파티 카드 그리드 */
+#party-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+}
+
+/* 카드 크기 & 디자인 */
+.party-card {
+    background-color: #fff;
+    border: 1px solid #e8dccd;
+    border-radius: 12px;
+    padding: 20px;
+    width: calc(50% - 10px); /* 한 줄에 2개 */
+    height: 160px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.party-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.party-card h5 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #d86c3f;
+    margin-bottom: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.party-card p {
+    font-size: 0.95rem;
+    color: #5a3d2b;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.remaining-time {
+    font-weight: bold;
+    color: #d9534f;
+}
+
+/* 모달 외형 */
+.custom-modal-content {
+    background-color: #fffaf3;
+    border-radius: 18px;
+    border: 1px solid #e5d4c3;
+    padding: 10px 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+/* 제목 스타일 */
+.modal-title-custom {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #d86c3f;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 입력 폼 여백 및 디자인 */
+.modal-body .form-label {
+    font-weight: 600;
+    color: #3e2c1c;
+}
+
+.modal-body .form-control,
+.modal-body .form-select {
+    border-radius: 10px;
+    border: 1px solid #e2d4c3;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+}
+
+.modal-body .form-control:focus,
+.modal-body .form-select:focus {
+    border-color: #d86c3f;
+    box-shadow: 0 0 0 0.15rem rgba(216, 108, 63, 0.25);
+}
+
+/* 제출 버튼 */
+.btn-modal-submit {
+    background-color: #f87437;
+    color: white;
+    font-weight: 600;
+    padding: 10px 24px;
+    border-radius: 12px;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-modal-submit:hover {
+    background-color: #9f3f14;
+}

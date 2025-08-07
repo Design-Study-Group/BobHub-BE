@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 수정</title>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 60px auto;
+            background: #fff;
+            padding: 30px 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="password"],
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+            background-color: white;
+            appearance: none; /* 크롬, 사파리 */
+            -moz-appearance: none; /* 파이어폭스 */
+            -webkit-appearance: none; /* 사파리 */
+        }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* 파이어폭스 */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <h2>게시글 수정</h2>
+
+<!--    <form th:action="@{|recommendation/update/${recommendation.id}|}" method="post" name="updateForm">-->
+<!--        <input type="hidden" name="id" th:value="${recommendation.id}">-->
+    <form th:action="@{/recommendation/update}" method="post" th:object="${recommendation}">
+        <input type="hidden" th:field="*{id}" />
+
+        <label for="storeName">상호명</label>
+        <input type="text" id="storeName" name="storeName" th:value="${recommendation.storeName}" placeholder="상호명을 입력하세요">
+
+        <label for="star">별점 (1~5)</label>
+        <input type="number" id="star" name="star" min="1" max="5" step="1" th:value="${recommendation.star}" placeholder="1~5 숫자만 입력하세요" required oninput="this.value=this.value.replace(/[^0-9]/g,'');" inputmode="numeric">
+
+        <label for="totalTime">소요시간 (분)</label>
+        <input type="number" id="totalTime" name="totalTime" min="1" step="1" th:value="${recommendation.totalTime}" placeholder="소요시간을 입력하세요" required oninput="this.value=this.value.replace(/[^0-9]/g,'');" inputmode="numeric">
+
+        <label for="pricePerPerson">인당 가격 (원)</label>
+        <input type="number" id="pricePerPerson" name="pricePerPerson" th:value="${recommendation.pricePerPerson}" min="1" step="1" placeholder="인당 가격을 입력하세요" required oninput="this.value=this.value.replace(/[^0-9]/g,'');" inputmode="numeric">
+
+        <label for="isReservation">예약 여부</label>
+        <select id="isReservation" name="isReservation">
+            <option value="true" th:selected="${recommendation.isReservation == true}">가능</option>
+            <option value="false" th:selected="${recommendation.isReservation == false}">불가능</option>
+        </select>
+
+        <input type="submit" value="수정하기">
+    </form>
+</div>
+
+</body>
+</html>
