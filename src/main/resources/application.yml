@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev  # 기본 프로필 dev
+    active: prod  # 기본 프로필 dev
   
   application:
     name: BobHub
