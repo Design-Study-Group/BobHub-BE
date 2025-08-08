@@ -20,7 +20,7 @@ public class RecommendationController {
   @GetMapping("/recommendation/save")
   public String save(Model model) {
     model.addAttribute("recommendation", new Recommendation());
-  return "recommendation_save";
+    return "recommendation_save";
   }
 
   @PostMapping("/recommendation/save")
