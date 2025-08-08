@@ -1,0 +1,36 @@
+<!-- templates/fragments/recommendation_form.html -->
+<div th:fragment="formFragment(recommendation, actionUrl, submitText)">
+    <form th:object="${recommendation}" th:action="@{${actionUrl}}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="mb-3">
+            <label for="storeName" class="form-label">상호명</label>
+            <input type="text" id="storeName" class="form-control" th:field="*{storeName}" placeholder="상호명을 입력하세요" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="star" class="form-label">별점 (1~5)</label>
+            <input type="number" id="star" class="form-control" th:field="*{star}" min="1" max="5" step="1" placeholder="1~5 숫자만 입력하세요" required inputmode="numeric">
+        </div>
+
+        <div class="mb-3">
+            <label for="totalTime" class="form-label">소요시간 (분)</label>
+            <input type="number" id="totalTime" class="form-control" th:field="*{totalTime}" min="1" step="1" placeholder="소요시간을 입력하세요" required inputmode="numeric">
+        </div>
+
+        <div class="mb-3">
+            <label for="pricePerPerson" class="form-label">인당 가격 (원)</label>
+            <input type="number" id="pricePerPerson" class="form-control" th:field="*{pricePerPerson}" min="1" step="1" placeholder="인당 가격을 입력하세요" required inputmode="numeric">
+        </div>
+
+        <div class="mb-3">
+            <label for="reservation" class="form-label">예약 여부</label>
+            <select id="reservation" class="form-select" th:field="*{reservation}">
+                <option th:value="true" th:selected="${recommendation.reservation}">가능</option>
+                <option th:value="false" th:selected="${!recommendation.reservation}">불가능</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-write" th:text="${submitText}">제출</button>
+    </form>
+</div>

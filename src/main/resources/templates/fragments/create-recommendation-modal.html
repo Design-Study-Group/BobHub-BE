@@ -1,0 +1,55 @@
+<div th:fragment="createRecommendationModal">
+    <div class="modal fade" id="createRecommendationModal" tabindex="-1" aria-labelledby="createRecommendationLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content custom-modal-content">
+                <form th:object="${recommendation}" th:action="@{/recommendation/save}" method="post">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title modal-title-custom" id="createRecommendationLabel">게시글 작성</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+                    </div>
+                    <div class="modal-body pt-0">
+                        <!-- 에러 메시지 표시 -->
+                        <div th:if="${errors}" class="alert alert-danger" style="white-space:pre-line;">
+                            <ul style="margin-bottom:0;">
+                                <li th:each="err : ${errors}" th:text="${err.defaultMessage}"></li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="storeName" class="form-label">상호명</label>
+                            <input type="text" class="form-control" id="storeName" th:field="*{storeName}" placeholder="상호명을 입력하세요" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="star" class="form-label">별점 (1~5)</label>
+                            <input type="number" class="form-control" id="star" th:field="*{star}" min="1" max="5" step="1" placeholder="1~5 숫자만 입력하세요" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="totalTime" class="form-label">소요시간 (분)</label>
+                            <input type="number" class="form-control" id="totalTime" th:field="*{totalTime}" min="1" step="1" placeholder="소요시간을 입력하세요" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="pricePerPerson" class="form-label">인당 가격 (원)</label>
+                            <input type="number" class="form-control" id="pricePerPerson" th:field="*{pricePerPerson}" min="1" step="1" placeholder="인당 가격을 입력하세요" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="reservation" class="form-label">예약 여부</label>
+                            <select class="form-select" id="reservation" th:field="*{reservation}">
+                                <option th:value="${true}">가능</option>
+                                <option th:value="${false}">불가능</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer border-0 mt-4">
+                        <button type="submit" class="btn btn-modal-submit">작성</button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

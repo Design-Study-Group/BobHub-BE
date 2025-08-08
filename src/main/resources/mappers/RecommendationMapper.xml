@@ -9,15 +9,15 @@
         <result property="star" column="STAR"/>
         <result property="totalTime" column="TOTAL_TIME"/>
         <result property="pricePerPerson" column="PRICE_PER_PERSON"/>
-        <result property="isReservation" column="IS_RESERVATION"/>
+        <result property="reservation" column="RESERVATION"/>
     </resultMap>
     <select id="findAll" resultMap="recommendationResultMap">
         select * from RECOMMENDATION order by id desc
     </select>
 
     <insert id="insert" parameterType="com.bobhub.domain.Recommendation">
-        insert into RECOMMENDATION (ID, STORE_NAME, STAR, TOTAL_TIME, PRICE_PER_PERSON, IS_RESERVATION)
-        values (RECOMMENDATION_SEQ.NEXTVAL, #{storeName}, #{star}, #{totalTime}, #{pricePerPerson}, #{isReservation})
+        insert into RECOMMENDATION (ID, STORE_NAME, STAR, TOTAL_TIME, PRICE_PER_PERSON, RESERVATION)
+        values (RECOMMENDATION_SEQ.NEXTVAL, #{storeName}, #{star}, #{totalTime}, #{pricePerPerson}, #{reservation})
     </insert>
 
     <!--    <update id = "updateHits" parameterType="Long">-->
@@ -33,7 +33,7 @@
                                   STAR = #{star},
                                   TOTAL_TIME = #{totalTime},
                                   PRICE_PER_PERSON = #{pricePerPerson},
-                                  IS_RESERVATION = #{isReservation}
+                                  RESERVATION = #{reservation}
         where id = #{id}
     </update>
 
