@@ -1,7 +1,6 @@
 package com.bobhub.controller;
 
 import com.bobhub.domain.Party;
-import com.bobhub.log.AllLogger;
 import com.bobhub.service.MypageService;
 import java.util.List;
 import lombok.*;
@@ -29,7 +28,7 @@ public class MypageController {
       @RequestParam(defaultValue = "my") String category,
       @AuthenticationPrincipal OAuth2User oAuth2User,
       Model model) {
-    if(oAuth2User == null) {
+    if (oAuth2User == null) {
       return "redirect:/";
     }
 
