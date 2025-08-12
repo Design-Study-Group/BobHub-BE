@@ -18,7 +18,8 @@ public class RecommendationController {
   //    private final RecommendationService recommendationService;
 
   @GetMapping("/recommendation/save")
-  public String save() {
+  public String save(Model model) {
+    model.addAttribute("recommendation", new Recommendation());
     return "recommendation_save";
   }
 
@@ -32,6 +33,7 @@ public class RecommendationController {
   public String findAll(Model model) {
     List<Recommendation> recommendationList = recommendationService.findAll();
     model.addAttribute("recommendationList", recommendationList);
+    model.addAttribute("recommendation", new Recommendation());
     return "recommendation_list";
   }
 
