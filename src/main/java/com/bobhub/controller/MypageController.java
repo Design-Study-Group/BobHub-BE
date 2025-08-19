@@ -1,7 +1,6 @@
 package com.bobhub.controller;
 
 import com.bobhub.domain.Party;
-import com.bobhub.log.AllLogger;
 import com.bobhub.service.MypageService;
 import java.util.List;
 import lombok.*;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class MypageController {
   private final MypageService mypageService;
-  private final AllLogger allLogger;
 
   @GetMapping("")
   public String mypage() {
@@ -30,6 +28,10 @@ public class MypageController {
       @RequestParam(defaultValue = "my") String category,
       @AuthenticationPrincipal OAuth2User oAuth2User,
       Model model) {
+    if (oAuth2User == null) {
+      return "redirect:/";
+    }
+
     List<Party> parties;
 
     if ("my".equals(category)) {
