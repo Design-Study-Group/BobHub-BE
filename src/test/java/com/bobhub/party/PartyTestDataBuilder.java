@@ -1,9 +1,9 @@
 package com.bobhub.party;
 
-import com.bobhub.domain.Party;
-import com.bobhub.domain.PartyCategory;
-import com.bobhub.dto.PartyCreateRequest;
-import com.bobhub.dto.PartyUpdateRequest;
+import com.bobhub.party.domain.Party;
+import com.bobhub.party.domain.PartyCategory;
+import com.bobhub.party.dto.PartyCreateRequest;
+import com.bobhub.party.dto.PartyUpdateRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 

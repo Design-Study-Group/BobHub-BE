@@ -1,9 +1,10 @@
 package com.bobhub.party;
 
-import com.bobhub.domain.Party;
-import com.bobhub.domain.PartyCategory;
-import com.bobhub.dto.PartyCreateRequest;
-import com.bobhub.dto.PartyUpdateRequest;
+import com.bobhub.party.domain.Party;
+import com.bobhub.party.domain.PartyCategory;
+import com.bobhub.party.dto.PartyCreateRequest;
+import com.bobhub.party.dto.PartyUpdateRequest;
+import com.bobhub.party.dto.PartyUpdateResponse;
 import com.bobhub.service.PartyService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -89,13 +90,13 @@ public abstract class PartyTestBase {
   }
 
   /** 테스트 결과 검증 헬퍼 메서드 */
-  protected void assertSuccessResponse(com.bobhub.dto.PartyUpdateResponse response) {
+  protected void assertSuccessResponse(PartyUpdateResponse response) {
     assert response.isSuccess();
     assert response.getMessage() != null;
     assert !response.getMessage().isEmpty();
   }
 
-  protected void assertFailureResponse(com.bobhub.dto.PartyUpdateResponse response) {
+  protected void assertFailureResponse(PartyUpdateResponse response) {
     assert !response.isSuccess();
     assert response.getMessage() != null;
     assert !response.getMessage().isEmpty();

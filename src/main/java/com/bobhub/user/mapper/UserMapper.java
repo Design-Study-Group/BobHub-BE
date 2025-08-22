@@ -1,0 +1,11 @@
+package com.bobhub.user.mapper;
+
+import com.bobhub.user.domain.User;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface UserMapper {
+  User findByEmail(String email);
+
+  void insertUser(User user);
+}

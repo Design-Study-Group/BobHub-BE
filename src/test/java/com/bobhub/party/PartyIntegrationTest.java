@@ -2,10 +2,10 @@ package com.bobhub.party;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.bobhub.domain.Party;
-import com.bobhub.domain.PartyCategory;
-import com.bobhub.dto.PartyUpdateRequest;
-import com.bobhub.dto.PartyUpdateResponse;
+import com.bobhub.party.domain.Party;
+import com.bobhub.party.domain.PartyCategory;
+import com.bobhub.party.dto.PartyUpdateRequest;
+import com.bobhub.party.dto.PartyUpdateResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;

@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.bobhub.mapper.UserMapper">
+<mapper namespace="com.bobhub.user.mapper.UserMapper">
 
     <select id="findByEmail" resultType="User">
         SELECT * FROM users WHERE email = #{email}
