@@ -3,12 +3,12 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.bobhub.mapper.PartyMapper">
+<mapper namespace="com.bobhub.party.mapper.PartyMapper">
 
     <!-- resultMap 정의 -->
-    <resultMap id="PartyViewResultMap" type="com.bobhub.dto.PartyViewResponse">
+    <resultMap id="PartyViewResultMap" type="com.bobhub.party.dto.PartyViewResponse">
         <id property="id" column="id"/>
-        <result property="category" column="category" javaType="com.bobhub.domain.PartyCategory"/>
+        <result property="category" column="category" javaType="com.bobhub.party.domain.PartyCategory"/>
         <result property="title" column="title"/>
         <result property="limitPeople" column="limitPeople"/>
         <result property="limitPrice" column="limitPrice"/>
@@ -37,7 +37,7 @@
     </select>
 
     <!-- 파티 생성 -->
-    <insert id="createParty" parameterType="com.bobhub.domain.Party" useGeneratedKeys="false" keyProperty="id">
+    <insert id="createParty" parameterType="com.bobhub.party.domain.Party" useGeneratedKeys="false" keyProperty="id">
         INSERT INTO party (title,
                            finished_at,
                            limit_people,
@@ -55,7 +55,7 @@
     </insert>
 
     <!-- 파티 ID로 조회 -->
-    <select id="getPartyById" parameterType="long" resultType="com.bobhub.domain.Party">
+    <select id="getPartyById" parameterType="long" resultType="com.bobhub.party.domain.Party">
         SELECT id,
                category,
                title,
@@ -88,7 +88,7 @@
     </select>
 
     <!-- 파티 정보 수정 -->
-    <update id="updateParty" parameterType="com.bobhub.domain.Party">
+    <update id="updateParty" parameterType="com.bobhub.party.domain.Party">
         UPDATE party
         SET title        = #{title},
             category     = #{category},

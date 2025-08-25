@@ -3,9 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.bobhub.mapper.CommentMapper">
+<mapper namespace="com.bobhub.comment.mapper.CommentMapper">
 
-    <resultMap id="CommentResultMap" type="com.bobhub.domain.Comments">
+    <resultMap id="CommentResultMap" type="com.bobhub.comment.domain.Comments">
         <id property="id" column="id"/>
         <result property="partyId" column="party_id"/>
         <result property="writerId" column="writer_id"/>

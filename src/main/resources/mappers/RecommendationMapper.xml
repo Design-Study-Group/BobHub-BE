@@ -2,22 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.bobhub.mapper.RecommendationMapper">
-    <resultMap id="recommendationResultMap" type="com.bobhub.domain.Recommendation">
+<mapper namespace="com.bobhub.recommendation.mapper.RecommendationMapper">
+    <resultMap id="recommendationResultMap" type="com.bobhub.recommendation.domain.Recommendation">
         <id property="id" column="ID"/>
         <result property="storeName" column="STORE_NAME"/>
         <result property="star" column="STAR"/>
         <result property="totalTime" column="TOTAL_TIME"/>
         <result property="pricePerPerson" column="PRICE_PER_PERSON"/>
-        <result property="reservation" column="RESERVATION"/>
+        <result property="isReservation" column="IS_RESERVATION"/>
     </resultMap>
     <select id="findAll" resultMap="recommendationResultMap">
         select * from RECOMMENDATION order by id desc
     </select>
 
-    <insert id="insert" parameterType="com.bobhub.domain.Recommendation">
-        insert into RECOMMENDATION (ID, STORE_NAME, STAR, TOTAL_TIME, PRICE_PER_PERSON, RESERVATION)
-        values (RECOMMENDATION_SEQ.NEXTVAL, #{storeName}, #{star}, #{totalTime}, #{pricePerPerson}, #{reservation})
+    <insert id="insert" parameterType="com.bobhub.recommendation.domain.Recommendation">
+        insert into RECOMMENDATION (ID, STORE_NAME, STAR, TOTAL_TIME, PRICE_PER_PERSON, IS_RESERVATION)
+        values (RECOMMENDATION_SEQ.NEXTVAL, #{storeName}, #{star}, #{totalTime}, #{pricePerPerson}, #{isReservation})
     </insert>
 
     <!--    <update id = "updateHits" parameterType="Long">-->
@@ -33,7 +33,7 @@
                                   STAR = #{star},
                                   TOTAL_TIME = #{totalTime},
                                   PRICE_PER_PERSON = #{pricePerPerson},
-                                  RESERVATION = #{reservation}
+                                  IS_RESERVATION = #{isReservation}
         where id = #{id}
     </update>
 
