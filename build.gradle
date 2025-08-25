@@ -29,13 +29,15 @@ dependencies {
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
 
     // Oracle JDBC (주의: 수동 설치 필요 가능)
-    implementation 'com.oracle.database.jdbc:ojdbc11:21.9.0.0' // ojdbc8은 자바 21 비호환 가능성 있음
+    implementation 'com.oracle.database.jdbc:ojdbc11:21.9.0.0'
 
     //Google OAuth2
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
     // Google API Client (for ID Token verification)
-    implementation 'com.google.api-client:google-api-client:2.2.0'
+    implementation('com.google.api-client:google-api-client:2.2.0') {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
 
     // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
@@ -48,6 +50,7 @@ dependencies {
 
     // 테스트
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test' // Spring Security 테스트 지원
     
     // H2 Database (테스트용)
     testImplementation 'com.h2database:h2'
