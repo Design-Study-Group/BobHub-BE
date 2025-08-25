@@ -23,7 +23,7 @@ public class JwtTokenProvider {
   private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60; // 1 hour
 
   // Reads the secret key from application.properties
-  public JwtTokenProvider(@Value("${JWT_SECRET}") String secretKey) {
+  public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
     this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
   }
 
