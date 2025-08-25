@@ -5,7 +5,7 @@ import com.bobhub.party.domain.PartyCategory;
 import com.bobhub.party.dto.PartyCreateRequest;
 import com.bobhub.party.dto.PartyUpdateRequest;
 import com.bobhub.party.dto.PartyUpdateResponse;
-import com.bobhub.service.PartyService;
+import com.bobhub.party.service.PartyService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import org.junit.jupiter.api.BeforeEach;

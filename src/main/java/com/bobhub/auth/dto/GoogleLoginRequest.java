@@ -8,5 +8,5 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class GoogleLoginRequest {
-    private String code;
+  private String code;
 }

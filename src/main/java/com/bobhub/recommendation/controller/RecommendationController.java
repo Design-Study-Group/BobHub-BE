@@ -1,7 +1,7 @@
 package com.bobhub.recommendation.controller;
 
-import com.bobhub.recommendation.repository.RecommendationRepository;
 import com.bobhub.recommendation.domain.Recommendation;
+import com.bobhub.recommendation.repository.RecommendationRepository;
 import com.bobhub.recommendation.service.RecommendationService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

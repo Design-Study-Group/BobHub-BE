@@ -1,8 +1,8 @@
 package com.bobhub.comment.controller;
 
 import com.bobhub.comment.domain.Comments;
-import com.bobhub.user.domain.User;
 import com.bobhub.comment.service.CommentService;
+import com.bobhub.user.domain.User;
 import com.bobhub.user.service.UserService;
 import java.util.List;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

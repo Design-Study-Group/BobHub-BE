@@ -1,7 +1,7 @@
 package com.bobhub.recommendation.service;
 
-import com.bobhub.recommendation.repository.RecommendationRepository;
 import com.bobhub.recommendation.domain.Recommendation;
+import com.bobhub.recommendation.repository.RecommendationRepository;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
