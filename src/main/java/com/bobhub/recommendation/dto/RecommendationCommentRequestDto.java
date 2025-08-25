@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class RecommendationCommentRequestDto {
-    private String content;
+  private String content;
 
-    public RecommendationComment toEntity(long recommendationId, long userId) {
-        return RecommendationComment.builder()
-                .recommendationId(recommendationId)
-                .userId(userId)
-                .content(this.content)
-                .build();
-    }
+  public RecommendationComment toEntity(long recommendationId, long userId) {
+    return RecommendationComment.builder()
+        .recommendationId(recommendationId)
+        .userId(userId)
+        .content(this.content)
+        .build();
+  }
 }
