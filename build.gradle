@@ -18,28 +18,31 @@ repositories {
 }
 
 dependencies {
-    // Spring Web
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-
-    // Thymeleaf
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-
-    // MyBatis
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
-
-    // Oracle JDBC (주의: 수동 설치 필요 가능)
-    implementation 'com.oracle.database.jdbc:ojdbc11:21.9.0.0' // ojdbc8은 자바 21 비호환 가능성 있음
-
-    //Google OAuth2
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+    // google
+    implementation('com.google.api-client:google-api-client:2.2.0') {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
     annotationProcessor 'org.projectlombok:lombok'
 
     // 테스트
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test' // Spring Security 테스트 지원
     
     // H2 Database (테스트용)
     testImplementation 'com.h2database:h2'

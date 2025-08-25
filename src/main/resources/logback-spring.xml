@@ -29,7 +29,7 @@
     </root>
 
     <!-- OracleDBLogger 클래스 전용 파일 로거 -->
-    <logger name="com.bobhub.log.AllLogger" level="INFO" additivity="true">
+    <logger name="com.bobhub._core.log.AllLogger" level="INFO" additivity="true">
         <appender-ref ref="ORACLE_FILE"/>
     </logger>
 

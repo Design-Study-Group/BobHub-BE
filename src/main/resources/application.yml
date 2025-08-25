@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: prod  # 기본 프로필 dev
+    active: dev  # 기본 프로필 dev
   
   application:
     name: BobHub
@@ -16,6 +16,9 @@ spring:
     suffix: .html
     cache: false
 
+jwt:
+  secret: ${JWT_SECRET}
+
 server:
   forward-headers-strategy: framework
   servlet:
@@ -27,5 +30,4 @@ server:
 
 mybatis:
   mapper-locations: classpath:/mappers/*.xml
-  type-aliases-package: com.bobhub.domain
-
+  type-aliases-package: com.bobhub.*.domain
