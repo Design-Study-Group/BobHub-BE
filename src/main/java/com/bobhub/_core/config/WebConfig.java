@@ -11,8 +11,9 @@ public class WebConfig implements WebMvcConfigurer {
   public void addCorsMappings(CorsRegistry registry) {
     registry
         .addMapping("/**")
-        .allowedOrigins("*")
+        .allowedOrigins("http://localhost:5173", "https://bobhub.vercel.app") // 허용할 출처 목록
         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
-        .allowedHeaders("*");
+        .allowedHeaders("*")
+        .allowCredentials(true); // 인증 정보(쿠키, Authorization 헤더 등)를 포함한 요청 허용
   }
 }

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bobhub.recommendation.mapper.RecommendationCommentMapper">
+
+    <resultMap id="commentResultMap" type="com.bobhub.recommendation.domain.RecommendationComment">
+        <id property="id" column="id"/>
+        <result property="recommendationId" column="recommendation_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="content" column="content"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.bobhub.recommendation.domain.RecommendationComment">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            SELECT RECOMMENDATION_COMMENT_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO recommendation_comment (id, recommendation_id, user_id, content)
+        VALUES (#{id}, #{recommendationId}, #{userId}, #{content})
+    </insert>
+
+    <select id="findById" parameterType="long" resultMap="commentResultMap">
+        SELECT
+            c.id, c.recommendation_id, c.user_id, c.content, c.created_at,
+            u.name AS user_name
+        FROM
+            recommendation_comment c
+        LEFT JOIN
+            users u ON c.user_id = u.id
+        WHERE
+            c.id = #{id}
+    </select>
+
+    <select id="findByRecommendationId" parameterType="long" resultMap="commentResultMap">
+        SELECT
+            c.id, c.recommendation_id, c.user_id, c.content, c.created_at,
+            u.name AS user_name
+        FROM
+            recommendation_comment c
+        LEFT JOIN
+            users u ON c.user_id = u.id
+        WHERE
+            c.recommendation_id = #{recommendationId}
+        ORDER BY
+            c.created_at DESC
+    </select>
+
+    <update id="update" parameterType="com.bobhub.recommendation.domain.RecommendationComment">
+        UPDATE recommendation_comment
+        SET content = #{content}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM recommendation_comment WHERE id = #{id}
+    </delete>
+
+</mapper>
