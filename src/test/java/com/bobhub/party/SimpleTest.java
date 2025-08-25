@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-/** 간단한 테스트로 환경 설정 확인 */
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
