@@ -2,6 +2,7 @@ package com.bobhub._core.config;
 
 import com.bobhub._core.jwt.JwtAuthenticationFilter;
 import com.bobhub._core.jwt.JwtTokenProvider;
+import com.bobhub.auth.service.TokenBlacklistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final TokenBlacklistService tokenBlacklistService; // 블랙리스트 서비스 주입
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -33,15 +35,17 @@ public class SecurityConfig {
             // 요청 경로별 인가 설정
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/", "/login",
+                    "/", "/login", "/error",
                     "/api/oauth/**", // Google ID 토큰 로그인을 위한 새 엔드포인트
+                    "/api/actuator/prometheus", // Prometheus 메트릭 수집 엔드포인트
                     "/document/**", "/css/**", "/images/**", "/js/**"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
 
             // 직접 만든 JWT 필터를 UsernamePasswordAuthenticationFilter 앞에 추가
-            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+            // 필터 생성 시 tokenBlacklistService를 전달
+            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, tokenBlacklistService), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

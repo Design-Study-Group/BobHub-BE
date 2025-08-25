@@ -5,13 +5,21 @@
 
 <mapper namespace="com.bobhub.user.mapper.UserMapper">
 
-    <select id="findByEmail" resultType="User">
+    <select id="findByEmail" resultType="com.bobhub.user.domain.User">
         SELECT * FROM users WHERE email = #{email}
     </select>
 
-    <insert id="insertUser">
+    <select id="findById" resultType="com.bobhub.user.domain.User">
+        SELECT * FROM users WHERE id = #{id}
+    </select>
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO users (email, name, picture)
         VALUES (#{email}, #{name}, #{picture})
     </insert>
+
+    <delete id="deleteById">
+        DELETE FROM users WHERE id = #{id}
+    </delete>
 
 </mapper>

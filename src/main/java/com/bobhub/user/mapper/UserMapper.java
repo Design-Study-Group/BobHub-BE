@@ -5,7 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserMapper {
-  User findByEmail(String email);
-
-  void insertUser(User user);
+    User findByEmail(String email);
+    User findById(Long id);
+    void insertUser(User user);
+    void deleteById(Long id);
 }
