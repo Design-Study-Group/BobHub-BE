@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -31,10 +33,12 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class AuthService {
 
+  private static final Logger log = LoggerFactory.getLogger(AuthService.class);
+
   private final UserMapper userMapper;
   private final JwtTokenProvider jwtTokenProvider;
   private final GoogleIdTokenVerifier googleIdTokenVerifier;
-  private final TokenBlacklistService tokenBlacklistService; // 블랙리스트 서비스 주입
+  private final TokenBlacklistService tokenBlacklistService;
 
   @Value("${spring.security.oauth2.client.registration.google.client-id}")
   private String googleClientId;
@@ -47,7 +51,6 @@ public class AuthService {
 
   @Transactional
   public LoginResponse loginWithGoogle(String code) throws GeneralSecurityException, IOException {
-    // ... (기존 loginWithGoogle 메소드 내용은 동일)
     String idTokenString = getIdTokenFromGoogle(code);
     GoogleIdToken idToken = googleIdTokenVerifier.verify(idTokenString);
     if (idToken == null) {
@@ -83,7 +86,7 @@ public class AuthService {
   }
 
   private String getIdTokenFromGoogle(String code) throws JsonProcessingException {
-    // ... (기존 getIdTokenFromGoogle 메소드 내용은 동일)
+    log.info("Backend redirect_uri for Google token request: {}", googleRedirectUri);
     RestTemplate restTemplate = new RestTemplate();
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add("code", code);
