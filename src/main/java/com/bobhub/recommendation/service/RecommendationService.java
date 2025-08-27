@@ -3,16 +3,16 @@ package com.bobhub.recommendation.service;
 import com.bobhub.recommendation.domain.Recommendation;
 import com.bobhub.recommendation.repository.RecommendationRepository;
 import java.util.List;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RecommendationService {
   private final RecommendationRepository recommendationRepository;
 
-  public void save(Recommendation recommendation) {
-    recommendationRepository.save(recommendation);
+  public Recommendation save(Recommendation recommendation) {
+    return recommendationRepository.save(recommendation);
   }
 
   public List<Recommendation> findAll() {
@@ -27,8 +27,8 @@ public class RecommendationService {
     return recommendationRepository.findById(id);
   }
 
-  public void update(Recommendation boardDto) {
-    recommendationRepository.update(boardDto);
+  public Recommendation update(Recommendation recommendation) {
+    return recommendationRepository.update(recommendation);
   }
 
   public void delete(Long id) {
