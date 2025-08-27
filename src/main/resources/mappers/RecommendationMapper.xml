@@ -5,6 +5,8 @@
 <mapper namespace="com.bobhub.recommendation.mapper.RecommendationMapper">
     <resultMap id="recommendationResultMap" type="com.bobhub.recommendation.domain.Recommendation">
         <id property="id" column="ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="category" column="CATEGORY"/>
         <result property="storeName" column="STORE_NAME"/>
         <result property="star" column="STAR"/>
         <result property="totalTime" column="TOTAL_TIME"/>
@@ -16,8 +18,8 @@
     </select>
 
     <insert id="insert" parameterType="com.bobhub.recommendation.domain.Recommendation">
-        insert into RECOMMENDATION (ID, STORE_NAME, STAR, TOTAL_TIME, PRICE_PER_PERSON, IS_RESERVATION)
-        values (RECOMMENDATION_SEQ.NEXTVAL, #{storeName}, #{star}, #{totalTime}, #{pricePerPerson}, #{isReservation})
+        insert into RECOMMENDATION (ID, USER_ID, CATEGORY, STORE_NAME, STAR, TOTAL_TIME, PRICE_PER_PERSON, IS_RESERVATION)
+        values (RECOMMENDATION_SEQ.NEXTVAL, #{userId}, #{category}, #{storeName}, #{star}, #{totalTime}, #{pricePerPerson}, #{isReservation})
     </insert>
 
     <!--    <update id = "updateHits" parameterType="Long">-->
@@ -29,7 +31,9 @@
     </select>
 
     <update id="update">
-        update RECOMMENDATION set STORE_NAME = #{storeName},
+        update RECOMMENDATION set USER_ID = #{userId},
+                                  CATEGORY = #{category},
+                                  STORE_NAME = #{storeName},
                                   STAR = #{star},
                                   TOTAL_TIME = #{totalTime},
                                   PRICE_PER_PERSON = #{pricePerPerson},
@@ -40,37 +44,4 @@
     <delete id = "delete" parameterType="Long">
         delete from RECOMMENDATION where id = #{id}
     </delete>
-
-
-
-
-    <!--    <insert id="save" parameterType="board" useGeneratedKeys="true" keyProperty="id">-->
-    <!--        insert into board_table(boardTitle, boardWriter, boardPass, boardContents, fileAttached)-->
-    <!--        values(#{boardTitle}, #{boardWriter}, #{boardPass}, #{boardContents}, #{fileAttached})-->
-    <!--    </insert>-->
-    <!--    <select id="findAll" resultType="board">-->
-    <!--        select id, boardTitle, boardWriter, boardHits, date_format(createdAt, "%Y-%m-%d") as createdAt-->
-    <!--        from board_table order by id desc-->
-    <!--    </select>-->
-    <!--    <update id="updateHits" parameterType="Long">-->
-    <!--        update board_table set boardHits=boardHits+1 where id=#{id}-->
-    <!--    </update>-->
-    <!--    <select id="findById" parameterType="Long" resultType="board">-->
-    <!--        select id, boardTitle, boardWriter, boardPass, boardContents, boardHits,-->
-    <!--               date_format(createdAt, "%Y-%m-%d %H:%i:%s") as createdAt, fileAttached-->
-    <!--        from board_table where id=#{id}-->
-    <!--    </select>-->
-    <!--    <update id="update">-->
-    <!--        update board_table set boardTitle=#{boardTitle}, boardContents=#{boardContents} where id=#{id}-->
-    <!--    </update>-->
-    <!--    <delete id="delete" parameterType="Long">-->
-    <!--        delete from board_table where id=#{id}-->
-    <!--    </delete>-->
-    <!--    <insert id="saveFile" parameterType="boardFile">-->
-    <!--        insert into board_file_table(originalFileName, storedFileName, boardId)-->
-    <!--        values (#{originalFileName}, #{storedFileName}, #{boardId})-->
-    <!--    </insert>-->
-    <!--    <select id="findFile" parameterType="Long" resultType="boardFile">-->
-    <!--        select * from board_file_table where boardId = #{id}-->
-    <!--    </select>-->
 </mapper>

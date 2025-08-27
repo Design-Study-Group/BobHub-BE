@@ -10,6 +10,8 @@ import lombok.*;
 @AllArgsConstructor
 public class Recommendation {
   private long id;
+  private long userId;
+  private String category;
   private String storeName;
   private int star;
   private int totalTime;
