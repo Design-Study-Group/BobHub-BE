@@ -2,6 +2,7 @@ package com.bobhub.recommendation.service;
 
 import com.bobhub.recommendation.domain.RecommendationComment;
 import com.bobhub.recommendation.dto.RecommendationCommentRequestDto;
+import com.bobhub.recommendation.mapper.RecommendationMapper;
 import com.bobhub.recommendation.repository.RecommendationCommentRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class RecommendationCommentService {
 
   private final RecommendationCommentRepository commentRepository;
+  private final RecommendationMapper recommendationMapper;
 
   public RecommendationComment createComment(
       long recommendationId, long userId, RecommendationCommentRequestDto requestDto) {
     RecommendationComment comment = requestDto.toEntity(recommendationId, userId);
-    return commentRepository.save(comment);
+    RecommendationComment savedComment = commentRepository.save(comment);
+    recommendationMapper.updateRating(recommendationId);
+    return savedComment;
   }
 
   @Transactional(readOnly = true)
@@ -32,11 +36,17 @@ public class RecommendationCommentService {
       throw new IllegalArgumentException("Comment not found with id: " + commentId);
     }
     comment.setContent(requestDto.getContent());
+    comment.setStar(requestDto.getStar());
     commentRepository.update(comment);
+    recommendationMapper.updateRating(comment.getRecommendationId());
   }
 
   public void deleteComment(long commentId) {
-    commentRepository.delete(commentId);
+    RecommendationComment comment = commentRepository.findById(commentId);
+    if (comment != null) {
+      commentRepository.delete(commentId);
+      recommendationMapper.updateRating(comment.getRecommendationId());
+    }
   }
 
   @Transactional(readOnly = true)

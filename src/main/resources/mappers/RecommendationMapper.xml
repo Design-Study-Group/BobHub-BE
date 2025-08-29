@@ -8,18 +8,23 @@
         <result property="userId" column="USER_ID"/>
         <result property="category" column="CATEGORY"/>
         <result property="storeName" column="STORE_NAME"/>
-        <result property="star" column="STAR"/>
+        <result property="description" column="DESCRIPTION"/>
+        <result property="averageRating" column="AVERAGE_RATING"/>
         <result property="totalTime" column="TOTAL_TIME"/>
         <result property="pricePerPerson" column="PRICE_PER_PERSON"/>
         <result property="isReservation" column="IS_RESERVATION"/>
+        <result property="ratingCount" column="RATING_COUNT"/>
+        <result property="deleted" column="DELETED"/>
+        <result property="deletedAt" column="DELETED_AT"/>
     </resultMap>
+
     <select id="findAll" resultMap="recommendationResultMap">
-        select * from RECOMMENDATION order by id desc
+        select * from RECOMMENDATION where DELETED = 0 order by id desc
     </select>
 
     <insert id="insert" parameterType="com.bobhub.recommendation.domain.Recommendation">
-        insert into RECOMMENDATION (ID, USER_ID, CATEGORY, STORE_NAME, STAR, TOTAL_TIME, PRICE_PER_PERSON, IS_RESERVATION)
-        values (RECOMMENDATION_SEQ.NEXTVAL, #{userId}, #{category}, #{storeName}, #{star}, #{totalTime}, #{pricePerPerson}, #{isReservation})
+        insert into RECOMMENDATION (ID, USER_ID, CATEGORY, STORE_NAME, DESCRIPTION, TOTAL_TIME, PRICE_PER_PERSON, IS_RESERVATION)
+        values (RECOMMENDATION_SEQ.NEXTVAL, #{userId}, #{category}, #{storeName}, #{description}, #{totalTime}, #{pricePerPerson}, #{isReservation})
     </insert>
 
     <!--    <update id = "updateHits" parameterType="Long">-->
@@ -27,21 +32,40 @@
     <!--    </update>-->
 
     <select id="findById" parameterType="Long" resultMap="recommendationResultMap">
-        select * from RECOMMENDATION where id = #{id}
+        select * from RECOMMENDATION where id = #{id} and DELETED = 0
     </select>
 
     <update id="update">
         update RECOMMENDATION set USER_ID = #{userId},
                                   CATEGORY = #{category},
                                   STORE_NAME = #{storeName},
-                                  STAR = #{star},
+                                  DESCRIPTION = #{description},
                                   TOTAL_TIME = #{totalTime},
                                   PRICE_PER_PERSON = #{pricePerPerson},
                                   IS_RESERVATION = #{isReservation}
+        where id = #{id} and DELETED = 0
+    </update>
+
+    <update id="delete" parameterType="Long">
+        update RECOMMENDATION
+        set DELETED = 1,
+            DELETED_AT = SYSTIMESTAMP
         where id = #{id}
     </update>
 
-    <delete id = "delete" parameterType="Long">
-        delete from RECOMMENDATION where id = #{id}
-    </delete>
+    <update id="updateRating" parameterType="long">
+        UPDATE RECOMMENDATION
+        SET
+            AVERAGE_RATING = (
+                SELECT NVL(AVG(STAR), 0)
+                FROM RECOMMENDATION_COMMENT
+                WHERE RECOMMENDATION_ID = #{recommendationId}
+            ),
+            RATING_COUNT = (
+                SELECT COUNT(ID)
+                FROM RECOMMENDATION_COMMENT
+                WHERE RECOMMENDATION_ID = #{recommendationId}
+            )
+        WHERE ID = #{recommendationId}
+    </update>
 </mapper>

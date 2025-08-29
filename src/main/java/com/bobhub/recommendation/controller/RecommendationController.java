@@ -60,7 +60,6 @@ public class RecommendationController {
 
     // 2. 해당 게시물의 댓글 목록 조회
     List<RecommendationComment> comments = commentService.findCommentsByRecommendationId(id);
-    System.out.println(comments);
 
     // 3. DTO 변환
     RecommendationResponseDto responseDto = new RecommendationResponseDto(recommendation);
