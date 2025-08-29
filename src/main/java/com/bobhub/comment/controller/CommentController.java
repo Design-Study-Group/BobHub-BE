@@ -3,56 +3,72 @@ package com.bobhub.comment.controller;
 import com.bobhub.comment.domain.Comments;
 import com.bobhub.comment.service.CommentService;
 import com.bobhub.user.domain.User;
+import com.bobhub.user.mapper.UserMapper;
 import com.bobhub.user.service.UserService;
+
+import java.security.Principal;
 import java.util.List;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/parties/{partyId}/comments")
+@RequiredArgsConstructor
 public class CommentController {
 
   private final CommentService commentService;
-  private final UserService userService;
-
-  public CommentController(CommentService commentService, UserService userService) {
-    this.commentService = commentService;
-    this.userService = userService;
-  }
+  private final UserMapper userMapper;
 
   // 댓글 목록 + 입력 폼
   @GetMapping
-  public String showComments(@PathVariable Long partyId, Model model) {
-    List<Comments> comments = commentService.getComments(partyId);
-    model.addAttribute("comments", comments);
-    model.addAttribute("commentForm", new Comments());
-    model.addAttribute("partyId", partyId);
-
-    return "comments/comment-list";
+  public List<Comments> showComments(@PathVariable Long partyId, Model model) {
+    return commentService.getComments(partyId);
   }
 
   // 댓글 작성
   @PostMapping
-  public String addComment(
+  public void addComment(
       @PathVariable Long partyId,
-      @ModelAttribute("commentForm") Comments comment,
-      @AuthenticationPrincipal OAuth2User oauthUser) {
-    String email = oauthUser.getAttribute("email");
-    User user = userService.findByEmail(email);
-    comment.setWriterId(user.getId());
+      @RequestBody Comments comment, Principal principal) {
+    Long userId = getUserIdFromPrincipal(principal);
+
+    System.out.println(comment);
+    comment.setWriterId(userId);
     comment.setPartyId(partyId);
 
     commentService.addComment(comment);
-    return "redirect:/parties/" + partyId + "/comments";
   }
 
   // 댓글 삭제
   @PostMapping("/delete")
-  public String deleteComment(@ModelAttribute Comments comment) {
+  public void deleteComment(@ModelAttribute Comments comment) {
     commentService.deleteComment(comment);
-    return "redirect:/parties/comments";
+  }
+
+  private Long getUserIdFromPrincipal(Principal principal) {
+    if (principal == null) {
+      return null;
+    }
+
+    String email = null;
+    if (principal instanceof OAuth2AuthenticationToken) {
+      OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) principal;
+      email = (String) oauthToken.getPrincipal().getAttributes().get("email");
+    } else {
+      email = principal.getName();
+    }
+
+    if (email == null) {
+      return null;
+    }
+
+    var user = userMapper.findByEmail(email);
+    return user != null ? user.getId() : null;
   }
 }
