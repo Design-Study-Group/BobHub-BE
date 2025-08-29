@@ -7,16 +7,18 @@ import com.bobhub.party.dto.PartyViewResponse;
 import com.bobhub.party.service.PartyService;
 import com.bobhub.user.mapper.UserMapper;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/parties")
 @RequiredArgsConstructor
 public class PartyController {
@@ -24,26 +26,17 @@ public class PartyController {
   private final UserMapper userMapper;
 
   @GetMapping
-  public String viewPartiesByCategory(
-      @RequestParam(defaultValue = "DELIVERY") String category, Model model, Principal principal) {
+  public List<PartyViewResponse> viewPartiesByCategory(
+      @RequestParam(defaultValue = "DELIVERY") String category, Principal principal) {
+
+    System.out.println("viewPartiesByCategory: " + category);
     String upperCategory = category.toUpperCase();
-    List<PartyViewResponse> parties = partyService.getPartiesByCategory(upperCategory);
-
-    model.addAttribute("category", upperCategory);
-    model.addAttribute("parties", parties);
-
-    if (principal != null) {
-      var user = userMapper.findByEmail(principal.getName());
-      if (user != null) {
-        model.addAttribute("userId", user.getId());
-      }
-    }
-    return "parties";
+    return partyService.getPartiesByCategory(upperCategory);
   }
 
-  @PostMapping("/create")
-  public String createParties(
-      Principal principal, @ModelAttribute PartyCreateRequest request, Model model) {
+  @PostMapping
+  public int createParties(
+      Principal principal, @RequestBody PartyCreateRequest request, Model model) {
     String email = null;
     if (principal instanceof OAuth2AuthenticationToken) {
       OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) principal;
@@ -70,13 +63,14 @@ public class PartyController {
     } catch (Exception e) {
       model.addAttribute(
           "errors", List.of(new ObjectError("limitPeople", "최대 인원 수는 정수만 입력할 수 있습니다.")));
-      return "parties";
+      return -1;
     }
     // 파티 생성 서비스에 int로 넘기기 위해 setter 추가 필요시 수정
     request.setLimitPeople(String.valueOf(limitPeopleInt));
 
+    System.out.println("create" + request.toString());
     partyService.createParty(request);
-    return "redirect:/parties";
+    return 0;
   }
 
   @GetMapping("/edit/{partyId}")
@@ -166,5 +160,25 @@ public class PartyController {
 
     var user = userMapper.findByEmail(email);
     return user != null ? user.getId() : null;
+  }
+
+  @PostMapping("{id}/join")
+  public ResponseEntity<Map<String, Object>> joinParty(
+      @PathVariable("id") Long partyId, Principal principal) {
+    Long userId = getUserIdFromPrincipal(principal);
+    try {
+      String msg = partyService.createJoinParty(partyId, userId);
+      Map<String, Object> map = new HashMap<>();
+      map.put("message", msg);
+      map.put("success", true);
+
+      return ResponseEntity.ok(map);
+    } catch (Exception e) {
+      Map<String, Object> response = new HashMap<>();
+      response.put("message", "파티 참여에 실패했습니다: " + e.getMessage());
+      response.put("success", false);
+
+      return ResponseEntity.badRequest().body(response);
+    }
   }
 }

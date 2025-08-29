@@ -160,3 +160,38 @@ body {
 .btn-modal-submit:hover {
     background-color: #9f3f14;
 }
+
+/* 별점 스타일 */
+.rating-stars {
+    display: inline-block;
+    font-size: 1rem;          /* 별 크기 조절 */
+    line-height: 1;
+}
+
+.rating-stars .star {
+    margin-right: 2px;
+    font-size: 1.05rem;       /* 필요하면 조정 */
+}
+
+/* 채워진 별(주황) */
+.rating-stars .star.filled {
+    color: #f5a623;           /* 채워진 별 색 (주황 계열) */
+    text-shadow: 0 1px 0 rgba(0,0,0,0.05);
+}
+
+/* 빈 별(연한 회색) */
+.rating-stars .star.empty {
+    color: #eee;              /* 빈 별 색 */
+}
+
+div.table-responsive table.table.table-hover tbody tr:nth-child(odd) td {
+    background-color: #fffaf3 !important;
+}
+
+div.table-responsive table.table.table-hover tbody tr:nth-child(even) td {
+    background-color: #F5F0E9 !important;
+}
+
+table tbody tr:hover {
+    background-color: #f1f7ff; /* 살짝 파란 톤 강조 */
+}

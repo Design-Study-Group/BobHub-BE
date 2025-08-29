@@ -22,5 +22,11 @@ public interface PartyMapper {
 
   boolean isPartyOwner(@Param("partyId") long partyId, @Param("userId") long userId);
 
+  boolean isJoinParty(@Param("partyId") long partyId, @Param("userId") long userId);
+
+  void createJoinParty(@Param("partyId") long partyId, @Param("userId") long userId);
+
+  long getPartyOwner(@Param("partyId") long partyId);
+
   List<Party> getAllPartyByOwnerId(@Param("id") long id);
 }
