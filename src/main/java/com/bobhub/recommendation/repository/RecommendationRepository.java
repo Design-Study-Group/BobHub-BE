@@ -11,8 +11,9 @@ import org.springframework.stereotype.Repository;
 public class RecommendationRepository {
   private final RecommendationMapper recommendationMapper;
 
-  public void save(Recommendation recommendation) {
+  public Recommendation save(Recommendation recommendation) {
     recommendationMapper.insert(recommendation);
+    return recommendation;
   }
 
   public List<Recommendation> findAll() {
@@ -26,8 +27,9 @@ public class RecommendationRepository {
     return recommendationMapper.findById(id);
   }
 
-  public void update(Recommendation recommendation) {
+  public Recommendation update(Recommendation recommendation) {
     recommendationMapper.update(recommendation);
+    return recommendation;
   }
 
   public void delete(Long id) {

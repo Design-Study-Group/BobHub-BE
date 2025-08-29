@@ -1,72 +1,93 @@
 package com.bobhub.recommendation.controller;
 
+import com.bobhub._core.security.PrincipalDetails;
 import com.bobhub.recommendation.domain.Recommendation;
-import com.bobhub.recommendation.repository.RecommendationRepository;
+import com.bobhub.recommendation.domain.RecommendationComment;
+import com.bobhub.recommendation.dto.RecommendationCommentResponseDto;
+import com.bobhub.recommendation.dto.RecommendationRequestDto;
+import com.bobhub.recommendation.dto.RecommendationResponseDto;
+import com.bobhub.recommendation.service.RecommendationCommentService;
 import com.bobhub.recommendation.service.RecommendationService;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
+@RequestMapping("/api/recommendation")
 @RequiredArgsConstructor
 public class RecommendationController {
+
   private final RecommendationService recommendationService;
-  private final RecommendationRepository recommendationRepository;
+  private final RecommendationCommentService commentService;
 
-  //    private final RecommendationService recommendationService;
-
-  @GetMapping("/recommendation/save")
-  public String save(Model model) {
-    model.addAttribute("recommendation", new Recommendation());
-    return "recommendation_save";
+  private long getUserIdFromAuthentication(Authentication authentication) {
+    PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+    return principalDetails.getUser().getId();
   }
 
-  @PostMapping("/recommendation/save")
-  public String save(Recommendation recommendation) {
-    recommendationService.save(recommendation);
-    return "redirect:/recommendation";
+  @PostMapping
+  public ResponseEntity<RecommendationResponseDto> save(
+      @RequestBody RecommendationRequestDto requestDto, Authentication authentication) {
+    long userId = getUserIdFromAuthentication(authentication);
+    Recommendation recommendation = requestDto.toEntity();
+    recommendation.setUserId(userId);
+    Recommendation savedRecommendation = recommendationService.save(recommendation);
+    return new ResponseEntity<>(
+        new RecommendationResponseDto(savedRecommendation), HttpStatus.CREATED);
   }
 
-  @GetMapping("/recommendation")
-  public String findAll(Model model) {
+  @GetMapping
+  public ResponseEntity<List<RecommendationResponseDto>> findAll() {
     List<Recommendation> recommendationList = recommendationService.findAll();
-    model.addAttribute("recommendationList", recommendationList);
-    model.addAttribute("recommendation", new Recommendation());
-    return "recommendation_list";
+    List<RecommendationResponseDto> responseDtoList =
+        recommendationList.stream()
+            .map(RecommendationResponseDto::new)
+            .collect(Collectors.toList());
+    return ResponseEntity.ok(responseDtoList);
   }
 
-  @GetMapping("/recommendation/{id}")
-  public String findById(@PathVariable("id") Long id, Model model) {
-    // 조회수 처리
-    //        recommendationService.updateHits(id);
-
-    // 상세내용 가져옴
+  @GetMapping("/{id}")
+  public ResponseEntity<RecommendationResponseDto> findById(@PathVariable("id") Long id) {
+    // 1. 추천 게시물 정보 조회
     Recommendation recommendation = recommendationService.findById(id);
-    model.addAttribute("recommendation", recommendation);
+    if (recommendation == null) {
+      return ResponseEntity.notFound().build();
+    }
 
-    //        List<CommentDto> commentDtoList = commentService.findAll(id);
-    //        model.addAttribute("commentDtoList", commentDtoList);
-    return "recommendation_detail";
+    // 2. 해당 게시물의 댓글 목록 조회
+    List<RecommendationComment> comments = commentService.findCommentsByRecommendationId(id);
+
+    // 3. DTO 변환
+    RecommendationResponseDto responseDto = new RecommendationResponseDto(recommendation);
+    List<RecommendationCommentResponseDto> commentDtos =
+        comments.stream().map(RecommendationCommentResponseDto::new).collect(Collectors.toList());
+
+    // 4. 댓글 목록을 추천 게시물 DTO에 설정
+    responseDto.setComments(commentDtos);
+
+    return ResponseEntity.ok(responseDto);
   }
 
-  @PostMapping("/recommendation/update")
-  public String update(@ModelAttribute Recommendation recommendation) {
-    recommendationService.update(recommendation);
-    return "redirect:/recommendation";
+  @PutMapping("/{id}")
+  public ResponseEntity<RecommendationResponseDto> update(
+      @PathVariable("id") Long id,
+      @RequestBody RecommendationRequestDto requestDto,
+      Authentication authentication) {
+    long userId = getUserIdFromAuthentication(authentication);
+    Recommendation recommendation = requestDto.toEntity();
+    recommendation.setId(id);
+    recommendation.setUserId(userId);
+    Recommendation updatedRecommendation = recommendationService.update(recommendation);
+    return ResponseEntity.ok(new RecommendationResponseDto(updatedRecommendation));
   }
 
-  @GetMapping("/recommendation/update/{id}")
-  public String update(@PathVariable("id") Long id, Model model) {
-    Recommendation recommendation = recommendationService.findById(id);
-    model.addAttribute("recommendation", recommendation);
-    return "recommendation_update";
-  }
-
-  @GetMapping("/recommendation/delete/{id}")
-  public String delete(@PathVariable("id") Long id) {
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
     recommendationService.delete(id);
-    return "redirect:/recommendation";
+    return ResponseEntity.noContent().build();
   }
 }

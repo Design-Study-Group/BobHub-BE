@@ -8,6 +8,7 @@ spring:
             client-secret: ${GOOGLE_CLIENT_SECRET}
             redirect-uri: "http://localhost:5173/auth/CallBack"
             scope:
+              - openid
               - email
               - profile
         provider:

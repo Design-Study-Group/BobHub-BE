@@ -10,10 +10,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -31,10 +35,12 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class AuthService {
 
+  private static final Logger log = LoggerFactory.getLogger(AuthService.class);
+
   private final UserMapper userMapper;
   private final JwtTokenProvider jwtTokenProvider;
   private final GoogleIdTokenVerifier googleIdTokenVerifier;
-  private final TokenBlacklistService tokenBlacklistService; // 블랙리스트 서비스 주입
+  private final TokenBlacklistService tokenBlacklistService;
 
   @Value("${spring.security.oauth2.client.registration.google.client-id}")
   private String googleClientId;
@@ -47,7 +53,6 @@ public class AuthService {
 
   @Transactional
   public LoginResponse loginWithGoogle(String code) throws GeneralSecurityException, IOException {
-    // ... (기존 loginWithGoogle 메소드 내용은 동일)
     String idTokenString = getIdTokenFromGoogle(code);
     GoogleIdToken idToken = googleIdTokenVerifier.verify(idTokenString);
     if (idToken == null) {
@@ -71,19 +76,27 @@ public class AuthService {
         new UsernamePasswordAuthenticationToken(
             principalDetails, null, principalDetails.getAuthorities());
     String accessToken = jwtTokenProvider.generateToken(authentication);
-    return new LoginResponse(accessToken, user);
+    String refreshToken = jwtTokenProvider.generateRefreshToken(authentication);
+    return new LoginResponse(accessToken, refreshToken, user);
   }
 
   public void logout(HttpServletRequest request) {
-    final String authHeader = request.getHeader("Authorization");
-    if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
-      String accessToken = authHeader.substring(7);
-      tokenBlacklistService.addToBlacklist(accessToken);
+    Cookie[] cookies = request.getCookies();
+    if (cookies == null) {
+      return;
     }
+
+    Arrays.stream(cookies)
+        .filter(
+            cookie ->
+                "accessToken".equals(cookie.getName()) || "refreshToken".equals(cookie.getName()))
+        .map(Cookie::getValue)
+        .filter(StringUtils::hasText)
+        .forEach(tokenBlacklistService::addToBlacklist);
   }
 
   private String getIdTokenFromGoogle(String code) throws JsonProcessingException {
-    // ... (기존 getIdTokenFromGoogle 메소드 내용은 동일)
+    log.info("Backend redirect_uri for Google token request: {}", googleRedirectUri);
     RestTemplate restTemplate = new RestTemplate();
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add("code", code);

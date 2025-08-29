@@ -6,8 +6,7 @@ import lombok.Getter;
 public enum PartyCategory {
   DELIVERY("배달"),
   DINE_OUT("외식"),
-  LUNCHBOX("도시락"),
-  BETTING("내기");
+  LUNCHBOX("도시락");
 
   private final String krName;
 
