@@ -14,6 +14,7 @@ public class RecommendationComment {
   private long recommendationId;
   private long userId;
   private String userName;
+  private int star;
   private String content;
   private LocalDateTime createdAt;
 }
