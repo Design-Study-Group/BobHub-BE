@@ -1,5 +1,8 @@
 package com.bobhub.party.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum PartyCategory {
   DELIVERY("배달"),
   DINE_OUT("외식"),
@@ -12,7 +15,4 @@ public enum PartyCategory {
     this.krName = krName;
   }
 
-  public String getKrName() {
-    return krName;
-  }
 }

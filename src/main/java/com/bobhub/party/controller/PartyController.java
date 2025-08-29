@@ -16,7 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/parties")
 @RequiredArgsConstructor
 public class PartyController {
@@ -24,26 +24,18 @@ public class PartyController {
   private final UserMapper userMapper;
 
   @GetMapping
-  public String viewPartiesByCategory(
-      @RequestParam(defaultValue = "DELIVERY") String category, Model model, Principal principal) {
+  public List<PartyViewResponse> viewPartiesByCategory(
+          @RequestParam(defaultValue = "DELIVERY") String category,
+          Principal principal) {
+
+    System.out.println("viewPartiesByCategory: " + category);
     String upperCategory = category.toUpperCase();
-    List<PartyViewResponse> parties = partyService.getPartiesByCategory(upperCategory);
-
-    model.addAttribute("category", upperCategory);
-    model.addAttribute("parties", parties);
-
-    if (principal != null) {
-      var user = userMapper.findByEmail(principal.getName());
-      if (user != null) {
-        model.addAttribute("userId", user.getId());
-      }
-    }
-    return "parties";
+    return partyService.getPartiesByCategory(upperCategory);
   }
 
-  @PostMapping("/create")
-  public String createParties(
-      Principal principal, @ModelAttribute PartyCreateRequest request, Model model) {
+  @PostMapping
+  public int createParties(
+      Principal principal, @RequestBody PartyCreateRequest request, Model model) {
     String email = null;
     if (principal instanceof OAuth2AuthenticationToken) {
       OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) principal;
@@ -70,13 +62,14 @@ public class PartyController {
     } catch (Exception e) {
       model.addAttribute(
           "errors", List.of(new ObjectError("limitPeople", "최대 인원 수는 정수만 입력할 수 있습니다.")));
-      return "parties";
+      return -1;
     }
     // 파티 생성 서비스에 int로 넘기기 위해 setter 추가 필요시 수정
     request.setLimitPeople(String.valueOf(limitPeopleInt));
 
+    System.out.println("create" + request.toString());
     partyService.createParty(request);
-    return "redirect:/parties";
+    return 0;
   }
 
   @GetMapping("/edit/{partyId}")
@@ -166,5 +159,13 @@ public class PartyController {
 
     var user = userMapper.findByEmail(email);
     return user != null ? user.getId() : null;
+  }
+
+  @PostMapping("{id}/join")
+  public void joinParty(@PathVariable Long id, Principal principal) {
+    // 1.id 값 확인
+    // 2. userid가져오기
+    // 3. userid중에 해당 파티에 참여되어있는지 여부 확인하기
+
   }
 }
