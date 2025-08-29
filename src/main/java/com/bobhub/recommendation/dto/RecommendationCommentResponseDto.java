@@ -6,13 +6,13 @@ import lombok.Getter;
 
 @Getter
 public class RecommendationCommentResponseDto {
-    private long id;
-    private long recommendationId;
-    private long userId;
-    private String userName; // 작성자 이름 필드 추가
-    private final int star;
-    private String content;
-    private LocalDateTime createdAt;
+  private long id;
+  private long recommendationId;
+  private long userId;
+  private String userName; // 작성자 이름 필드 추가
+  private final int star;
+  private String content;
+  private LocalDateTime createdAt;
 
   public RecommendationCommentResponseDto(RecommendationComment entity) {
     this.id = entity.getId();

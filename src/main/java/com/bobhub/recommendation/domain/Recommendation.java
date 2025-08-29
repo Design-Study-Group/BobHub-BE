@@ -1,8 +1,7 @@
 package com.bobhub.recommendation.domain;
 
-import lombok.*;
-
 import java.time.LocalDateTime;
+import lombok.*;
 
 @Getter
 @Setter

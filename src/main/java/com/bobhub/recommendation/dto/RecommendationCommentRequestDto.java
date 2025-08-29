@@ -10,7 +10,7 @@ public class RecommendationCommentRequestDto {
   private String content;
   private int star;
 
-    public RecommendationComment toEntity(long recommendationId, long userId) {
+  public RecommendationComment toEntity(long recommendationId, long userId) {
     return RecommendationComment.builder()
         .recommendationId(recommendationId)
         .userId(userId)
