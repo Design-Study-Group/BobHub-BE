@@ -6,6 +6,10 @@ import com.bobhub.auth.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Map;
+
+import jakarta.servlet.http.Cookie;
+ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,17 +24,44 @@ public class AuthController {
 
   private final AuthService authService;
 
-  @PostMapping("/oauth/google")
-  public ResponseEntity<LoginResponse> googleLogin(@RequestBody GoogleLoginRequest request)
-      throws GeneralSecurityException, IOException {
-    System.out.println("로그인 요청 들어옴");
-    LoginResponse loginResponse = authService.loginWithGoogle(request.getCode());
-    return ResponseEntity.ok(loginResponse);
+  private void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
+      Cookie cookie = new Cookie(name, value);
+      cookie.setPath("/");
+      cookie.setMaxAge(maxAge);
+      cookie.setHttpOnly(true); // JavaScript에서 쿠키에 접근하지 못하도록 설정 (XSS 방지)
+      // cookie.setSecure(true); // HTTPS 환경에서만 쿠키를 전송하도록 설정 (배포 시 활성화)
+      response.addCookie(cookie);
   }
 
-  @PostMapping("/auth/logout")
-  public ResponseEntity<Void> logout(HttpServletRequest request) {
-    authService.logout(request);
+  @PostMapping("/oauth/google")
+  public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> requestBody, HttpServletResponse response) {
+      try {
+          String code = requestBody.get("code");
+          LoginResponse loginResponse = authService.loginWithGoogle(code);
+
+          // 1. AccessToken을 HttpOnly 쿠키에 설정
+          addCookie(response, "accessToken", loginResponse.getAccessToken(), 3600); // 1시간
+
+          // 2. RefreshToken을 HttpOnly 쿠키에 설정
+          addCookie(response, "refreshToken", loginResponse.getRefreshToken(), 604800); // 7일
+
+          // 3. 응답 본문에는 사용자 정보만 전달
+          return ResponseEntity.ok(loginResponse.getUserInfo());
+
+      } catch (Exception e) {
+          // 실제 프로덕션에서는 에러를 더 상세히 처리해야 합니다.
+          return ResponseEntity.status(401).body("Login Failed: " + e.getMessage());
+      }
+  }
+
+    @PostMapping("/auth/logout")
+  public ResponseEntity<Void> logout(HttpServletRequest req, HttpServletResponse res) {
+    // 1. 서버 측에서 Access/Refresh 토큰을 블랙리스트에 추가하여 무효화
+    authService.logout(req);
+
+    // 2. 클라이언트 브라우저의 쿠키를 삭제하기 위해 Max-Age=0으로 설정한 쿠키를 응답에 추가
+    addCookie(res, "accessToken", null, 0);
+    addCookie(res, "refreshToken", null, 0);
     return ResponseEntity.ok().build();
   }
 }

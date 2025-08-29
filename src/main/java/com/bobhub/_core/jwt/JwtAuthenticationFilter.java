@@ -6,7 +6,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Cookie;
 import java.io.IOException;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,8 +18,7 @@ import org.springframework.web.filter.GenericFilterBean;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
-  public static final String AUTHORIZATION_HEADER = "Authorization";
-  public static final String BEARER_PREFIX = "Bearer ";
+  public static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
 
   private final JwtTokenProvider jwtTokenProvider;
   private final TokenBlacklistService tokenBlacklistService; // 블랙리스트 서비스 주입
@@ -46,10 +47,14 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
   // Extract token from request header
   private String resolveToken(HttpServletRequest request) {
-    String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-    if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-      return bearerToken.substring(7);
+    Cookie[] cookies = request.getCookies();
+    if(cookies == null){
+        return null;
     }
-    return null;
+    return Arrays.stream(cookies)
+            .filter(cookie -> ACCESS_TOKEN_COOKIE_NAME.equals(cookie.getName()))
+            .map(Cookie::getValue)
+            .findFirst()
+            .orElse(null);
   }
 }
