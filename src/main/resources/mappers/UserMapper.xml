@@ -13,7 +13,7 @@
         SELECT * FROM users WHERE id = #{id}
     </select>
 
-    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
         INSERT INTO users (email, name, picture)
         VALUES (#{email}, #{name}, #{picture})
     </insert>

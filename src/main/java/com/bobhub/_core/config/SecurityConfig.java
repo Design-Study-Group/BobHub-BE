@@ -1,5 +1,7 @@
 package com.bobhub._core.config;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import com.bobhub._core.jwt.JwtAuthenticationFilter;
 import com.bobhub._core.jwt.JwtTokenProvider;
 import com.bobhub.auth.service.TokenBlacklistService;
@@ -25,6 +27,7 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         // CSRF, form login, HTTP basic 인증 비활성화
+        .cors(withDefaults())
         .csrf(AbstractHttpConfigurer::disable)
         .formLogin(AbstractHttpConfigurer::disable)
         .httpBasic(AbstractHttpConfigurer::disable)

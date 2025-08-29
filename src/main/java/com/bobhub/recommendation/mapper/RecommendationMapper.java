@@ -15,4 +15,6 @@ public interface RecommendationMapper {
   void update(Recommendation recommendation);
 
   void delete(Long id);
+
+  void updateRating(long recommendationId);
 }

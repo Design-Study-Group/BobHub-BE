@@ -21,9 +21,10 @@ public class JwtTokenProvider {
 
   private final Key key;
   private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60; // 1 hour
+  private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24; // 1 day
 
   // Reads the secret key from application.properties
-  public JwtTokenProvider(@Value("${JWT_SECRET}") String secretKey) {
+  public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
     this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
   }
 
@@ -87,5 +88,18 @@ public class JwtTokenProvider {
     } catch (ExpiredJwtException e) {
       return e.getClaims();
     }
+  }
+
+  public String generateRefreshToken(Authentication authentication) {
+    long now = (new Date()).getTime();
+    Date refreshTokenExpiresIn = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
+
+    String userId = authentication.getName();
+
+    return Jwts.builder()
+        .setSubject(userId)
+        .setExpiration(refreshTokenExpiresIn)
+        .signWith(key, SignatureAlgorithm.HS512)
+        .compact();
   }
 }
