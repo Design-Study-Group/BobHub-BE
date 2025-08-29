@@ -2,11 +2,12 @@ package com.bobhub.auth.controller;
 
 import com.bobhub.auth.dto.LoginResponse;
 import com.bobhub.auth.service.AuthService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,12 +22,14 @@ public class AuthController {
   private final AuthService authService;
 
   private void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
-    Cookie cookie = new Cookie(name, value);
-    cookie.setPath("/");
-    cookie.setMaxAge(maxAge);
-    cookie.setHttpOnly(true); // JavaScript에서 쿠키에 접근하지 못하도록 설정 (XSS 방지)
-    // cookie.setSecure(true); // HTTPS 환경에서만 쿠키를 전송하도록 설정 (배포 시 활성화)
-    response.addCookie(cookie);
+    ResponseCookie cookie = ResponseCookie.from(name, value)
+        .path("/")
+        .maxAge(maxAge)
+        .httpOnly(true)
+        .secure(true)
+        .sameSite("None")
+        .build();
+    response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
   }
 
   @PostMapping("/oauth/google")
