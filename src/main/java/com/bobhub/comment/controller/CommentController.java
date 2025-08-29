@@ -2,18 +2,11 @@ package com.bobhub.comment.controller;
 
 import com.bobhub.comment.domain.Comments;
 import com.bobhub.comment.service.CommentService;
-import com.bobhub.user.domain.User;
 import com.bobhub.user.mapper.UserMapper;
-import com.bobhub.user.service.UserService;
-
 import java.security.Principal;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +27,7 @@ public class CommentController {
   // 댓글 작성
   @PostMapping
   public void addComment(
-      @PathVariable Long partyId,
-      @RequestBody Comments comment, Principal principal) {
+      @PathVariable Long partyId, @RequestBody Comments comment, Principal principal) {
     Long userId = getUserIdFromPrincipal(principal);
 
     System.out.println(comment);
