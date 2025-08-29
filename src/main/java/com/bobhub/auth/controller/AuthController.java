@@ -22,13 +22,14 @@ public class AuthController {
   private final AuthService authService;
 
   private void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
-    ResponseCookie cookie = ResponseCookie.from(name, value)
-        .path("/")
-        .maxAge(maxAge)
-        .httpOnly(true)
-        .secure(true)
-        .sameSite("None")
-        .build();
+    ResponseCookie cookie =
+        ResponseCookie.from(name, value)
+            .path("/")
+            .maxAge(maxAge)
+            .httpOnly(true)
+            .secure(true)
+            .sameSite("None")
+            .build();
     response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
   }
 
