@@ -11,8 +11,8 @@ public class LoginResponse {
 
   public LoginResponse(String accessToken, String refreshToken, User user) {
     this.accessToken = accessToken;
-      this.refreshToken = refreshToken;
-      this.userInfo = new UserInfo(user);
+    this.refreshToken = refreshToken;
+    this.userInfo = new UserInfo(user);
   }
 
   @Getter

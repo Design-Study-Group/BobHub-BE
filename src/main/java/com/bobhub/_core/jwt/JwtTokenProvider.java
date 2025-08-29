@@ -91,15 +91,15 @@ public class JwtTokenProvider {
   }
 
   public String generateRefreshToken(Authentication authentication) {
-      long now = (new Date()).getTime();
-      Date refreshTokenExpiresIn = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
+    long now = (new Date()).getTime();
+    Date refreshTokenExpiresIn = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
 
-      String userId = authentication.getName();
+    String userId = authentication.getName();
 
-      return Jwts.builder()
-              .setSubject(userId)
-              .setExpiration(refreshTokenExpiresIn)
-              .signWith(key, SignatureAlgorithm.HS512)
-              .compact();
+    return Jwts.builder()
+        .setSubject(userId)
+        .setExpiration(refreshTokenExpiresIn)
+        .signWith(key, SignatureAlgorithm.HS512)
+        .compact();
   }
 }

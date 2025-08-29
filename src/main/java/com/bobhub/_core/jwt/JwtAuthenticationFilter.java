@@ -5,8 +5,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
@@ -48,13 +48,13 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
   // Extract token from request header
   private String resolveToken(HttpServletRequest request) {
     Cookie[] cookies = request.getCookies();
-    if(cookies == null){
-        return null;
+    if (cookies == null) {
+      return null;
     }
     return Arrays.stream(cookies)
-            .filter(cookie -> ACCESS_TOKEN_COOKIE_NAME.equals(cookie.getName()))
-            .map(Cookie::getValue)
-            .findFirst()
-            .orElse(null);
+        .filter(cookie -> ACCESS_TOKEN_COOKIE_NAME.equals(cookie.getName()))
+        .map(Cookie::getValue)
+        .findFirst()
+        .orElse(null);
   }
 }
