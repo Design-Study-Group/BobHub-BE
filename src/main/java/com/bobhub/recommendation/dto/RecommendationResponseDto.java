@@ -16,9 +16,11 @@ public class RecommendationResponseDto {
   private long userId;
   private String category;
   private String storeName;
-  private int star;
+  private float averageRating;
+  private int ratingCount;
   private int totalTime;
   private int pricePerPerson;
+  private String description;
   private boolean isReservation;
   private List<RecommendationCommentResponseDto> comments;
 
@@ -27,9 +29,11 @@ public class RecommendationResponseDto {
     this.userId = recommendation.getUserId();
     this.category = recommendation.getCategory();
     this.storeName = recommendation.getStoreName();
-    this.star = recommendation.getStar();
+    this.averageRating = recommendation.getAverageRating();
+    this.ratingCount = recommendation.getRatingCount();
     this.totalTime = recommendation.getTotalTime();
     this.pricePerPerson = recommendation.getPricePerPerson();
+    this.description = recommendation.getDescription();
     this.isReservation = recommendation.isReservation();
   }
 }

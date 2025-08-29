@@ -8,6 +8,7 @@
         <result property="userId" column="user_id"/>
         <result property="userName" column="user_name"/>
         <result property="content" column="content"/>
+        <result property="star" column="star"/>
         <result property="createdAt" column="created_at"/>
     </resultMap>
 
@@ -15,13 +16,13 @@
         <selectKey keyProperty="id" resultType="long" order="BEFORE">
             SELECT RECOMMENDATION_COMMENT_SEQ.NEXTVAL FROM DUAL
         </selectKey>
-        INSERT INTO recommendation_comment (id, recommendation_id, user_id, content)
-        VALUES (#{id}, #{recommendationId}, #{userId}, #{content})
+        INSERT INTO recommendation_comment (id, recommendation_id, user_id, content, star)
+        VALUES (#{id}, #{recommendationId}, #{userId}, #{content}, #{star})
     </insert>
 
     <select id="findById" parameterType="long" resultMap="commentResultMap">
         SELECT
-            c.id, c.recommendation_id, c.user_id, c.content, c.created_at,
+            c.id, c.recommendation_id, c.user_id, c.content, c.star, c.created_at,
             u.name AS user_name
         FROM
             recommendation_comment c
@@ -33,7 +34,7 @@
 
     <select id="findByRecommendationId" parameterType="long" resultMap="commentResultMap">
         SELECT
-            c.id, c.recommendation_id, c.user_id, c.content, c.created_at,
+            c.id, c.recommendation_id, c.user_id, c.content, c.star, c.created_at,
             u.name AS user_name
         FROM
             recommendation_comment c
@@ -47,7 +48,7 @@
 
     <update id="update" parameterType="com.bobhub.recommendation.domain.RecommendationComment">
         UPDATE recommendation_comment
-        SET content = #{content}
+        SET content = #{content}, star = #{star}
         WHERE id = #{id}
     </update>
 
