@@ -10,11 +10,9 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -29,8 +27,7 @@ public class PartyController {
 
   @GetMapping
   public List<PartyViewResponse> viewPartiesByCategory(
-          @RequestParam(defaultValue = "DELIVERY") String category,
-          Principal principal) {
+      @RequestParam(defaultValue = "DELIVERY") String category, Principal principal) {
 
     System.out.println("viewPartiesByCategory: " + category);
     String upperCategory = category.toUpperCase();
@@ -166,7 +163,8 @@ public class PartyController {
   }
 
   @PostMapping("{id}/join")
-  public ResponseEntity<Map<String, Object>> joinParty(@PathVariable("id") Long partyId, Principal principal) {
+  public ResponseEntity<Map<String, Object>> joinParty(
+      @PathVariable("id") Long partyId, Principal principal) {
     Long userId = getUserIdFromPrincipal(principal);
     try {
       String msg = partyService.createJoinParty(partyId, userId);

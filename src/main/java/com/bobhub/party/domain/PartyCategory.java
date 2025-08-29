@@ -14,5 +14,4 @@ public enum PartyCategory {
   PartyCategory(String krName) {
     this.krName = krName;
   }
-
 }

@@ -158,7 +158,8 @@ public class PartyService {
 
   /* 파티 조인 */
   public String createJoinParty(Long partyId, Long userId) {
-    if(partyMapper.isJoinParty(partyId, userId) || userId.equals(partyMapper.getPartyOwner(partyId))) {
+    if (partyMapper.isJoinParty(partyId, userId)
+        || userId.equals(partyMapper.getPartyOwner(partyId))) {
       return "이미 참여된 파티입니다.";
     }
 
@@ -169,5 +170,4 @@ public class PartyService {
   public boolean isJoinParty(Long partyId, Long userId) {
     return partyMapper.isJoinParty(partyId, userId);
   }
-
 }
