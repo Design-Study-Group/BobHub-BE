@@ -23,8 +23,8 @@
     </select>
 
     <insert id="insert" parameterType="com.bobhub.recommendation.domain.Recommendation">
-        insert into RECOMMENDATION (ID, USER_ID, CATEGORY, STORE_NAME, DESCRIPTION, TOTAL_TIME, PRICE_PER_PERSON, IS_RESERVATION)
-        values (RECOMMENDATION_SEQ.NEXTVAL, #{userId}, #{category}, #{storeName}, #{description}, #{totalTime}, #{pricePerPerson}, #{isReservation})
+        insert into RECOMMENDATION (ID, USER_ID, CATEGORY, STORE_NAME, DESCRIPTION, TOTAL_TIME, PRICE_PER_PERSON, IS_RESERVATION, DELETED)
+        values (RECOMMENDATION_SEQ.NEXTVAL, #{userId}, #{category}, #{storeName}, #{description}, #{totalTime}, #{pricePerPerson}, #{isReservation}, 0)
     </insert>
 
     <!--    <update id = "updateHits" parameterType="Long">-->
