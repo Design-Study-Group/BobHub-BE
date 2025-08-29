@@ -7,8 +7,12 @@ import com.bobhub.party.dto.PartyViewResponse;
 import com.bobhub.party.service.PartyService;
 import com.bobhub.user.mapper.UserMapper;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -162,10 +166,21 @@ public class PartyController {
   }
 
   @PostMapping("{id}/join")
-  public void joinParty(@PathVariable Long id, Principal principal) {
-    // 1.id 값 확인
-    // 2. userid가져오기
-    // 3. userid중에 해당 파티에 참여되어있는지 여부 확인하기
+  public ResponseEntity<Map<String, Object>> joinParty(@PathVariable("id") Long partyId, Principal principal) {
+    Long userId = getUserIdFromPrincipal(principal);
+    try {
+      String msg = partyService.createJoinParty(partyId, userId);
+      Map<String, Object> map = new HashMap<>();
+      map.put("message", msg);
+      map.put("success", true);
 
+      return ResponseEntity.ok(map);
+    } catch (Exception e) {
+      Map<String, Object> response = new HashMap<>();
+      response.put("message", "파티 참여에 실패했습니다: " + e.getMessage());
+      response.put("success", false);
+
+      return ResponseEntity.badRequest().body(response);
+    }
   }
 }

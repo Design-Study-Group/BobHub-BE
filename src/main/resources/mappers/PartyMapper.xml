@@ -123,6 +123,26 @@
           AND owner_id = #{userId}
     </select>
 
+    <select id="getPartyOwner" resultType="long">
+        SELECT owner_id
+        FROM party
+        where id = #{partyId}
+
+    </select>
+    <select id="isJoinParty" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM PARTYMEMBER
+        WHERE party_id = #{partyId}
+          AND user_id= #{userId}
+    </select>
+
+    <!-- 파티 참여 -->
+    <insert id="createJoinParty" parameterType="long">
+        insert into PARTYMEMBER (PARTY_ID, USER_ID)
+        VALUES (#{partyId}, #{userId})
+    </insert>
+
+
     <select id="getAllPartyByOwnerId" parameterType="long" resultMap="PartyViewResultMap">
         SELECT p.id,
                p.category,
