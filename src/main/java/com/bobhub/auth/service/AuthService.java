@@ -10,9 +10,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,15 +76,23 @@ public class AuthService {
         new UsernamePasswordAuthenticationToken(
             principalDetails, null, principalDetails.getAuthorities());
     String accessToken = jwtTokenProvider.generateToken(authentication);
-    return new LoginResponse(accessToken, user);
+    String refreshToken = jwtTokenProvider.generateRefreshToken(authentication);
+    return new LoginResponse(accessToken, refreshToken, user);
   }
 
   public void logout(HttpServletRequest request) {
-    final String authHeader = request.getHeader("Authorization");
-    if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
-      String accessToken = authHeader.substring(7);
-      tokenBlacklistService.addToBlacklist(accessToken);
+    Cookie[] cookies = request.getCookies();
+    if (cookies == null) {
+      return;
     }
+
+    Arrays.stream(cookies)
+        .filter(
+            cookie ->
+                "accessToken".equals(cookie.getName()) || "refreshToken".equals(cookie.getName()))
+        .map(Cookie::getValue)
+        .filter(StringUtils::hasText)
+        .forEach(tokenBlacklistService::addToBlacklist);
   }
 
   private String getIdTokenFromGoogle(String code) throws JsonProcessingException {
