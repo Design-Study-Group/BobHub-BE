@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,5 +115,39 @@ public class AuthService {
     GoogleOAuthToken googleOAuthToken =
         objectMapper.readValue(response.getBody(), GoogleOAuthToken.class);
     return googleOAuthToken.getIdToken();
+  }
+
+  public String refreshAccessToken(HttpServletRequest request) {
+    String refreshToken =
+        getRefreshTokenFromCookies(request)
+            .orElseThrow(() -> new IllegalArgumentException("Refresh token not found"));
+
+    // validateToken은 이제 예외를 던지므로, if문 없이 바로 호출합니다.
+    // 토큰이 유효하지 않으면 여기서 예외가 발생하고, 컨트롤러의 catch 블록으로 넘어갑니다.
+    jwtTokenProvider.validateToken(refreshToken);
+
+    Long userId = jwtTokenProvider.getUserIdFromToken(refreshToken);
+    User user = userMapper.findById(userId);
+    if (user == null) {
+      throw new IllegalArgumentException("User not found");
+    }
+
+    PrincipalDetails principalDetails = new PrincipalDetails(user);
+    Authentication authentication =
+        new UsernamePasswordAuthenticationToken(
+            principalDetails, null, principalDetails.getAuthorities());
+
+    return jwtTokenProvider.generateToken(authentication);
+  }
+
+  private Optional<String> getRefreshTokenFromCookies(HttpServletRequest request) {
+    Cookie[] cookies = request.getCookies();
+    if (cookies == null) {
+      return Optional.empty();
+    }
+    return Arrays.stream(cookies)
+        .filter(cookie -> "refreshToken".equals(cookie.getName()))
+        .map(Cookie::getValue)
+        .findFirst();
   }
 }
