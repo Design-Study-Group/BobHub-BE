@@ -25,7 +25,13 @@ public class AuthController {
 
   private void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
     ResponseCookie cookie =
-        ResponseCookie.from(name, value).path("/").maxAge(maxAge).httpOnly(true).build();
+        ResponseCookie.from(name, value)
+            .path("/")
+            .maxAge(maxAge)
+            .httpOnly(true)
+            .secure(true) // HTTPS 환경이므로 활성화
+            .sameSite("None") // 다른 도메인 간 쿠키 전송을 위해 활성화
+            .build();
     response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
   }
 
