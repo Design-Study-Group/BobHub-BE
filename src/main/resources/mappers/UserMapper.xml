@@ -18,6 +18,12 @@
         VALUES (#{email}, #{name}, #{picture})
     </insert>
 
+    <update id="updateName">
+        UPDATE users
+        SET name = #{name}
+        WHERE id = #{id}
+    </update>
+
     <delete id="deleteById">
         DELETE FROM users WHERE id = #{id}
     </delete>
