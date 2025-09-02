@@ -1,15 +1,22 @@
 package com.bobhub._core.jwt;
 
+import com.bobhub._core.exception.ErrorCode;
+import com.bobhub._core.utils.ApiUtils;
 import com.bobhub.auth.service.TokenBlacklistService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -21,31 +28,57 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
   public static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
 
   private final JwtTokenProvider jwtTokenProvider;
-  private final TokenBlacklistService tokenBlacklistService; // 블랙리스트 서비스 주입
+  private final TokenBlacklistService tokenBlacklistService;
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
     HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-    String jwt = resolveToken(httpServletRequest);
     String requestURI = httpServletRequest.getRequestURI();
 
-    // 토큰 유효성 검증 시, 블랙리스트에 있는지도 확인
-    if (StringUtils.hasText(jwt)
-        && jwtTokenProvider.validateToken(jwt)
-        && !tokenBlacklistService.isBlacklisted(jwt)) {
+    // 인증이 필요 없는 경로는 필터를 즉시 통과시킵니다.
+    if (isAuthBypassURI(requestURI)) {
+      chain.doFilter(request, response);
+      return;
+    }
+
+    String jwt = resolveToken(httpServletRequest);
+
+    if (!StringUtils.hasText(jwt)) {
+      sendErrorResponse((HttpServletResponse) response, ErrorCode.TOKEN_NOT_FOUND);
+      return;
+    }
+
+    try {
+      jwtTokenProvider.validateToken(jwt);
+
+      if (tokenBlacklistService.isBlacklisted(jwt)) {
+        sendErrorResponse((HttpServletResponse) response, ErrorCode.INVALID_TOKEN);
+        return;
+      }
+
       Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
       SecurityContextHolder.getContext().setAuthentication(authentication);
-      logger.info(
-          "Security Context에 '" + authentication.getName() + "' 인증 정보를 저장했습니다, uri: " + requestURI);
-    } else {
-      logger.debug("유효한 JWT 토큰이 없거나 블랙리스트에 등록된 토큰입니다, uri: " + requestURI);
+    } catch (ExpiredJwtException e) {
+      sendErrorResponse((HttpServletResponse) response, ErrorCode.TOKEN_EXPIRED);
+      return;
+    } catch (JwtException | IllegalArgumentException e) {
+      sendErrorResponse((HttpServletResponse) response, ErrorCode.INVALID_TOKEN);
+      return;
     }
 
     chain.doFilter(request, response);
   }
 
-  // Extract token from request header
+  private void sendErrorResponse(HttpServletResponse response, ErrorCode errorCode)
+      throws IOException {
+    response.setCharacterEncoding("utf-8");
+    response.setStatus(errorCode.getStatus().value());
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+    response.getWriter().write(objectMapper.writeValueAsString(ApiUtils.error(errorCode)));
+  }
+
   private String resolveToken(HttpServletRequest request) {
     Cookie[] cookies = request.getCookies();
     if (cookies == null) {
@@ -56,5 +89,9 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         .map(Cookie::getValue)
         .findFirst()
         .orElse(null);
+  }
+
+  private boolean isAuthBypassURI(String uri) {
+    return uri.equals("/api/refresh") || uri.startsWith("/api/oauth/");
   }
 }
