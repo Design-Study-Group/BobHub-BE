@@ -32,8 +32,7 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     ObjectMapper objectMapper = new ObjectMapper();
 
-    http
-        .cors(withDefaults())
+    http.cors(withDefaults())
         .csrf(AbstractHttpConfigurer::disable)
         .formLogin(AbstractHttpConfigurer::disable)
         .httpBasic(AbstractHttpConfigurer::disable)
@@ -41,14 +40,16 @@ public class SecurityConfig {
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .exceptionHandling(
             e ->
-                e.accessDeniedHandler((request, response, accessDeniedException) -> {
-                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                            response.getWriter().write(
-                                    objectMapper.writeValueAsString(ApiUtils.error(ErrorCode.ACCESS_DENIED))
-                            );
-                        })
-        )
+                e.accessDeniedHandler(
+                    (request, response, accessDeniedException) -> {
+                      response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                      response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                      response
+                          .getWriter()
+                          .write(
+                              objectMapper.writeValueAsString(
+                                  ApiUtils.error(ErrorCode.ACCESS_DENIED)));
+                    }))
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers(

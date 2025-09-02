@@ -25,11 +25,7 @@ public class AuthController {
 
   private void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
     ResponseCookie cookie =
-        ResponseCookie.from(name, value)
-            .path("/")
-            .maxAge(maxAge)
-            .httpOnly(true)
-            .build();
+        ResponseCookie.from(name, value).path("/").maxAge(maxAge).httpOnly(true).build();
     response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
   }
 

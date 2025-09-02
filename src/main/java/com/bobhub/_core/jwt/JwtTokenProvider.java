@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 public class JwtTokenProvider {
 
   private final Key key;
-  
+
   private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60; // 1시간
   private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 7일
 
