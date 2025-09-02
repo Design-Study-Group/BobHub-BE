@@ -19,7 +19,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/parties")
+@RequestMapping("/api/parties")
 @RequiredArgsConstructor
 public class PartyController {
   private final PartyService partyService;
@@ -162,7 +162,7 @@ public class PartyController {
     return user != null ? user.getId() : null;
   }
 
-  @PostMapping("{id}/join")
+  @PostMapping("/{id}/join")
   public ResponseEntity<Map<String, Object>> joinParty(
       @PathVariable("id") Long partyId, Principal principal) {
     Long userId = getUserIdFromPrincipal(principal);
