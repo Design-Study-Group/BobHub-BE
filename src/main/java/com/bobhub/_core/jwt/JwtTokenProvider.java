@@ -20,15 +20,14 @@ import org.springframework.stereotype.Component;
 public class JwtTokenProvider {
 
   private final Key key;
-  private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60; // 1 hour
-  private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24; // 1 day
+  
+  private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60; // 1시간
+  private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 7일
 
-  // Reads the secret key from application.properties
   public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
     this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
   }
 
-  /** Generates a JWT with custom claims (userId, email). */
   public String generateToken(Authentication authentication) {
     PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
     User user = principalDetails.getUser();
@@ -45,10 +44,6 @@ public class JwtTokenProvider {
         .compact();
   }
 
-  /**
-   * Creates an Authentication object from a JWT. The Principal will be our custom PrincipalDetails
-   * object.
-   */
   public Authentication getAuthentication(String accessToken) {
     Claims claims = parseClaims(accessToken);
 
@@ -66,28 +61,13 @@ public class JwtTokenProvider {
     return new UsernamePasswordAuthenticationToken(principal, "", authorities);
   }
 
-  public boolean validateToken(String token) {
-    try {
-      Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-      return true;
-    } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-      log.info("Invalid JWT signature.");
-    } catch (ExpiredJwtException e) {
-      log.info("Expired JWT token.");
-    } catch (UnsupportedJwtException e) {
-      log.info("Unsupported JWT token.");
-    } catch (IllegalArgumentException e) {
-      log.info("JWT token compact of handler are invalid.");
-    }
-    return false;
+  /** 토큰의 유효성을 검증합니다. 유효하지 않은 경우 (만료, 서명 오류 등) JwtException 또는 그 하위 예외를 던집니다. */
+  public void validateToken(String token) {
+    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
   }
 
   private Claims parseClaims(String accessToken) {
-    try {
-      return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
-    } catch (ExpiredJwtException e) {
-      return e.getClaims();
-    }
+    return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
   }
 
   public String generateRefreshToken(Authentication authentication) {
@@ -101,5 +81,10 @@ public class JwtTokenProvider {
         .setExpiration(refreshTokenExpiresIn)
         .signWith(key, SignatureAlgorithm.HS512)
         .compact();
+  }
+
+  public Long getUserIdFromToken(String token) {
+    Claims claims = parseClaims(token);
+    return Long.parseLong(claims.getSubject());
   }
 }
