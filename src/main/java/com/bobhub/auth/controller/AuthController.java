@@ -7,8 +7,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +25,7 @@ public class AuthController {
 
   private void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
     ResponseCookie cookie =
-        ResponseCookie.from(name, value)
-            .path("/")
-            .maxAge(maxAge)
-            .httpOnly(true)
-            .secure(true)
-            .sameSite("None")
-            .build();
+        ResponseCookie.from(name, value).path("/").maxAge(maxAge).httpOnly(true).build();
     response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
   }
 
@@ -41,10 +37,10 @@ public class AuthController {
       LoginResponse loginResponse = authService.loginWithGoogle(code);
 
       // 1. AccessToken을 HttpOnly 쿠키에 설정
-      addCookie(response, "accessToken", loginResponse.getAccessToken(), 3600); // 1시간
+      addCookie(response, "accessToken", loginResponse.getAccessToken(), 60 * 60 * 24); // 1일
 
       // 2. RefreshToken을 HttpOnly 쿠키에 설정
-      addCookie(response, "refreshToken", loginResponse.getRefreshToken(), 604800); // 7일
+      addCookie(response, "refreshToken", loginResponse.getRefreshToken(), 60 * 60 * 24 * 7); // 7일
 
       // 3. 응답 본문에는 사용자 정보만 전달
       return ResponseEntity.ok(loginResponse.getUserInfo());
@@ -64,5 +60,17 @@ public class AuthController {
     addCookie(res, "accessToken", null, 0);
     addCookie(res, "refreshToken", null, 0);
     return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/refresh")
+  public ResponseEntity<?> refresh(HttpServletRequest request, HttpServletResponse response) {
+    try {
+      String newAccessToken = authService.refreshAccessToken(request);
+      addCookie(response, "accessToken", newAccessToken, 60 * 60 * 24); // 1일
+      return ResponseEntity.ok().build();
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+          .body("Unable to refresh token: " + e.getMessage());
+    }
   }
 }
