@@ -3,6 +3,7 @@ package com.bobhub.user.controller;
 import com.bobhub._core.security.PrincipalDetails;
 import com.bobhub.user.dto.ActivityDto;
 import com.bobhub.user.dto.UserProfileDto;
+import com.bobhub.user.dto.UserProfileUpdateDto;
 import com.bobhub.user.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,14 @@ public class UserController {
       @AuthenticationPrincipal PrincipalDetails principalDetails) {
     UserProfileDto userProfile = userService.getUserProfile(principalDetails);
     return ResponseEntity.ok(userProfile);
+  }
+
+  @PutMapping("/profile")
+  public ResponseEntity<Void> updateUserProfile(
+      @AuthenticationPrincipal PrincipalDetails principalDetails,
+      @RequestBody UserProfileUpdateDto userProfileUpdateDto) {
+    userService.updateUserProfile(principalDetails, userProfileUpdateDto);
+    return ResponseEntity.ok().build();
   }
 
   @GetMapping("/activity")

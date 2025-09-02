@@ -4,6 +4,7 @@ import com.bobhub._core.security.PrincipalDetails;
 import com.bobhub.user.domain.User;
 import com.bobhub.user.dto.ActivityDto;
 import com.bobhub.user.dto.UserProfileDto;
+import com.bobhub.user.dto.UserProfileUpdateDto;
 import com.bobhub.user.mapper.UserMapper;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,6 +24,14 @@ public class UserService {
   public UserProfileDto getUserProfile(PrincipalDetails principalDetails) {
     User user = findUserById(principalDetails.getUser().getId());
     return new UserProfileDto(user);
+  }
+
+  @Transactional
+  public void updateUserProfile(
+      PrincipalDetails principalDetails, UserProfileUpdateDto userProfileUpdateDto) {
+    Long userId = principalDetails.getUser().getId();
+    String newName = userProfileUpdateDto.getName();
+    userMapper.updateName(userId, newName);
   }
 
   @Transactional(readOnly = true)
