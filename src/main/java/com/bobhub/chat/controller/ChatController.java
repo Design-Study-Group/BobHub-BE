@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/parties/{partyId}/comments")
 public class ChatController {
-    private final ChatService chatService;
-    private final UserMapper userMapper;
+  private final ChatService chatService;
+  private final UserMapper userMapper;
 
-    @GetMapping
-    public ChatRoomResponse chatRoom(@PathVariable long partyId) {
+  @GetMapping
+  public ChatRoomResponse chatRoom(@PathVariable long partyId) {
 
-        ChatRoom chatRoom = chatService.findRoomById(partyId);
-        return new ChatRoomResponse(chatRoom);
-    }
+    ChatRoom chatRoom = chatService.findRoomById(partyId);
+    return new ChatRoomResponse(chatRoom);
+  }
 }

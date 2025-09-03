@@ -70,8 +70,7 @@ public class PartyController {
     }
     // 파티 생성 서비스에 int로 넘기기 위해 setter 추가 필요시 수정
     request.setLimitPeople(String.valueOf(limitPeopleInt));
-
-    System.out.println("create" + request.toString());
+    partyService.createParty(request);
     return 0;
   }
 

@@ -56,6 +56,7 @@ public class PartyService {
             .isOpen(true)
             .build();
 
+    System.out.println("createParty: " + party.toString());
     partyMapper.createParty(party);
   }
 
