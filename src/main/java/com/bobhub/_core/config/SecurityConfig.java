@@ -58,6 +58,7 @@ public class SecurityConfig {
                         "/error",
                         "/api/oauth/**",
                         "/api/refresh",
+                        "/api/chatbot/**",
                         "/api/actuator/prometheus",
                         "/document/**",
                         "/css/**",
