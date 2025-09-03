@@ -11,6 +11,15 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: ${SPRING_DATASOURCE_DRIVER}
 
+  ai:
+    vertexai:
+      gemini:
+        project-id: 1011745632400
+        location: us-central1
+        chat:
+          options:
+            model: gemini-2.0-flash-lite
+
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
@@ -18,15 +27,6 @@ spring:
 
 jwt:
   secret: ${JWT_SECRET}
-
-server:
-  forward-headers-strategy: framework
-  servlet:
-    session:
-      cookie:
-        name: JSESSIONID
-        secure: true
-        same-site: none
 
 mybatis:
   mapper-locations: classpath:/mappers/*.xml

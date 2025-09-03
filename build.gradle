@@ -15,6 +15,7 @@ java {
 
 repositories {
     mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' } // Spring AI 마일스톤 리포지토리 추가
 }
 
 dependencies {
@@ -23,12 +24,18 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket' // WebSocket 통신을 위한 의존성 추가
+    implementation 'org.springframework.security:spring-security-messaging' // WebSocket 보안을 위한 의존성 추가
+    implementation 'org.springframework.ai:spring-ai-vertex-ai-gemini-spring-boot-starter:1.0.0-M6'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
     // google
     implementation('com.google.api-client:google-api-client:2.2.0') {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
+    implementation platform('io.grpc:grpc-bom:1.62.2')
+    implementation 'io.grpc:grpc-okhttp'
+    implementation 'io.grpc:grpc-netty-shaded'
     // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
