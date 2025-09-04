@@ -20,9 +20,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
   public void registerStompEndpoints(StompEndpointRegistry registry) {
     registry
         .addEndpoint("/api/chatbot")
-        .setAllowedOrigins("http://localhost:5173", "https://bobhub.vercel.app")
+        .setAllowedOriginPatterns("*")
         .withSockJS()
-        .setSessionCookieNeeded(false);
-    ; // 웹소켓 연결을 위한 엔드포인트
+        .setSessionCookieNeeded(false); // 웹소켓 연결을 위한 엔드포인트
   }
 }
