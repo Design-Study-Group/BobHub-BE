@@ -21,6 +21,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     registry
         .addEndpoint("/api/chatbot")
         .setAllowedOrigins("http://localhost:5173", "https://bobhub.vercel.app")
-        .withSockJS(); // 웹소켓 연결을 위한 엔드포인트
+        .withSockJS()
+        .setSessionCookieNeeded(false);; // 웹소켓 연결을 위한 엔드포인트
   }
 }
