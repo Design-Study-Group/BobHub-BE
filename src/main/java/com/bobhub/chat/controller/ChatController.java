@@ -1,9 +1,10 @@
 package com.bobhub.chat.controller;
 
-import com.bobhub.chat.dto.ChatRoom;
+import com.bobhub.chat.domain.ChatRoom;
+import com.bobhub.chat.dto.ChatMessageResponse;
 import com.bobhub.chat.dto.ChatRoomResponse;
 import com.bobhub.chat.service.ChatService;
-import com.bobhub.user.mapper.UserMapper;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,12 +13,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/parties/{partyId}/comments")
 public class ChatController {
   private final ChatService chatService;
-  private final UserMapper userMapper;
 
   @GetMapping
   public ChatRoomResponse chatRoom(@PathVariable long partyId) {
-
     ChatRoom chatRoom = chatService.findRoomById(partyId);
     return new ChatRoomResponse(chatRoom);
+  }
+
+  @GetMapping("/history")
+  public List<ChatMessageResponse> chatRoomHistory(@PathVariable long partyId) {
+    return chatService.getChatHistory(partyId);
   }
 }

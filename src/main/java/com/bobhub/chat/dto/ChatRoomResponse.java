@@ -1,5 +1,6 @@
 package com.bobhub.chat.dto;
 
+import com.bobhub.chat.domain.ChatRoom;
 import lombok.Data;
 
 @Data

@@ -1,4 +1,4 @@
-package com.bobhub.chat.dto;
+package com.bobhub.chat.domain;
 
 import com.bobhub.chat.service.ChatService;
 import java.util.HashSet;
@@ -21,14 +21,12 @@ public class ChatRoom {
       WebSocketSession session, ChatMessage chatMessage, ChatService chatService) {
     if (chatMessage.getType().equals(ChatMessage.MessageType.ENTER)) {
       sessions.add(session);
-      chatMessage.setMessage(chatMessage.getMessage() + "님이 입장하셨습니다.");
+      chatMessage.setContent(chatMessage.getContent() + "님이 입장하셨습니다.");
     }
     sendMessage(chatMessage, chatService);
   }
 
   public <T> void sendMessage(T data, ChatService chatService) {
-    System.out.println("=== Sending message ===");
-    System.out.println("Active sessions: " + sessions.size());
     sessions.parallelStream().forEach(session -> chatService.sendMessage(session, data));
   }
 

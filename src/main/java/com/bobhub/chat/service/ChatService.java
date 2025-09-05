@@ -1,7 +1,8 @@
 package com.bobhub.chat.service;
 
-import com.bobhub.chat.dto.ChatRoom;
-import com.bobhub.party.mapper.PartyMapper;
+import com.bobhub.chat.domain.ChatRoom;
+import com.bobhub.chat.dto.ChatMessageResponse;
+import com.bobhub.chat.mapper.ChatMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import java.util.*;
@@ -17,7 +18,7 @@ import org.springframework.web.socket.WebSocketSession;
 public class ChatService {
 
   private final ObjectMapper objectMapper;
-  private final PartyMapper partyMapper;
+  private final ChatMapper chatMapper;
   private Map<Long, ChatRoom> chatRooms;
 
   @PostConstruct
@@ -31,7 +32,7 @@ public class ChatService {
 
   public ChatRoom findRoomById(long partyId) {
     // 1. 기존 채팅방이 있는지 확인
-    System.out.println("chatRooms of partyId : " + chatRooms.get(partyId));
+    log.info("chatRooms of partyId : {}", chatRooms.get(partyId));
     if (chatRooms.get(partyId) != null) {
       long existingRoom = chatRooms.get(partyId).getPartyId();
       if (existingRoom == partyId) {
@@ -39,7 +40,7 @@ public class ChatService {
       }
     }
 
-    System.out.println("ChatRoom: " + chatRooms.get(partyId));
+    log.info("ChatRoom: {}", chatRooms.get(partyId));
     // 2. 없으면 새로 생성
     return createRoom(partyId); // 새로 생성된 채팅방 반환 (ID 포함)
   }
@@ -47,15 +48,19 @@ public class ChatService {
   public ChatRoom createRoom(long partyId) {
     ChatRoom chatRoom = ChatRoom.builder().partyId(partyId).build();
     chatRooms.put(partyId, chatRoom);
-    System.out.println("ChatRoom: " + chatRoom);
     return chatRoom;
   }
 
-  public <T> void sendMessage(WebSocketSession session, T message) {
+  public <T> void sendMessage(WebSocketSession session, T content) {
     try {
-      session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
+      session.sendMessage(new TextMessage(objectMapper.writeValueAsString(content)));
+
     } catch (Exception e) {
       log.error(e.getMessage());
     }
+  }
+
+  public List<ChatMessageResponse> getChatHistory(Long partyId) {
+    return chatMapper.getChatsByPartyId(partyId);
   }
 }

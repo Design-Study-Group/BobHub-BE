@@ -1,6 +1,6 @@
-package com.bobhub.chat.dto;
+package com.bobhub.chat.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.sql.Timestamp;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,10 +13,10 @@ public class ChatMessage {
   }
 
   private MessageType type = MessageType.TALK;
+  private long id;
   private long partyId;
   private long userId;
   private String sender;
-
-  @JsonProperty("content")
-  private String message;
+  private String content;
+  private Timestamp timestamp;
 }
