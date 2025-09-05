@@ -1,5 +1,6 @@
 package com.bobhub.party.service;
 
+import com.bobhub.chat.service.ChatService;
 import com.bobhub.party.domain.Party;
 import com.bobhub.party.domain.PartyCategory;
 import com.bobhub.party.dto.PartyCreateRequest;
@@ -21,6 +22,7 @@ public class PartyService {
   private final PartyMapper partyMapper;
   private final DateTimeFormatter dateTimeFormatter =
       DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+  private final ChatService chatService;
 
   /* 카테고리 별 파티 정보 조회 */
   public List<PartyViewResponse> getPartiesByCategory(String category) {
@@ -54,6 +56,7 @@ public class PartyService {
             .isOpen(true)
             .build();
 
+    System.out.println("createParty: " + party.toString());
     partyMapper.createParty(party);
   }
 
@@ -64,7 +67,6 @@ public class PartyService {
       if (party == null) {
         return PartyUpdateResponse.builder().message("파티를 찾을 수 없습니다.").success(false).build();
       }
-
       return PartyUpdateResponse.builder()
           .party(party)
           .message("파티 정보를 성공적으로 조회했습니다.")

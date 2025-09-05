@@ -15,4 +15,5 @@
         FROM PARTYMEMBER
         WHERE USER_ID = #{userId}
     </select>
+
 </mapper>

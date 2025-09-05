@@ -1,5 +1,6 @@
 package com.bobhub.party.controller;
 
+import com.bobhub.chat.service.ChatService;
 import com.bobhub.party.dto.PartyCreateRequest;
 import com.bobhub.party.dto.PartyUpdateRequest;
 import com.bobhub.party.dto.PartyUpdateResponse;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class PartyController {
   private final PartyService partyService;
   private final UserMapper userMapper;
+  private final ChatService chatService;
 
   @GetMapping
   public List<PartyViewResponse> viewPartiesByCategory(
@@ -38,6 +40,7 @@ public class PartyController {
   public int createParties(
       Principal principal, @RequestBody PartyCreateRequest request, Model model) {
     String email = null;
+
     if (principal instanceof OAuth2AuthenticationToken) {
       OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) principal;
       email = (String) oauthToken.getPrincipal().getAttributes().get("email");
@@ -67,8 +70,6 @@ public class PartyController {
     }
     // 파티 생성 서비스에 int로 넘기기 위해 setter 추가 필요시 수정
     request.setLimitPeople(String.valueOf(limitPeopleInt));
-
-    System.out.println("create" + request.toString());
     partyService.createParty(request);
     return 0;
   }
