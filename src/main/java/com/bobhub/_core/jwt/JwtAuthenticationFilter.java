@@ -94,6 +94,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
   }
 
   private boolean isAuthBypassURI(String uri) {
-    return uri.equals("/api/refresh") || uri.startsWith("/api/oauth/");
+    return uri.equals("/api/refresh")
+        || uri.startsWith("/api/oauth/")
+        || uri.startsWith("/api/chatbot/");
   }
 }
