@@ -47,8 +47,6 @@ dependencies {
     // H2 Database (테스트용)
     testImplementation 'com.h2database:h2'
 
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-websocket
-    implementation("org.springframework.boot:spring-boot-starter-websocket:3.5.5")
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
