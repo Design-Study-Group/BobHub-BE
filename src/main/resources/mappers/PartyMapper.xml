@@ -46,7 +46,7 @@
     </select>
 
     <!-- 파티 생성 -->
-    <insert id="createParty" parameterType="com.bobhub.party.domain.Party" useGeneratedKeys="false" keyProperty="id">
+    <insert id="createParty" parameterType="com.bobhub.party.domain.Party" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO party (title,
                            finished_at,
                            limit_people,
