@@ -37,6 +37,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     HttpServletRequest httpServletRequest = (HttpServletRequest) request;
     String requestURI = httpServletRequest.getRequestURI();
 
+    System.out.println(">>> [JwtAuthenticationFilter] Processing URI: " + requestURI);
+
     // 인증이 필요 없는 경로는 필터를 즉시 통과시킵니다.
     if (isAuthBypassURI(requestURI)) {
       chain.doFilter(request, response);
@@ -92,6 +94,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
   }
 
   private boolean isAuthBypassURI(String uri) {
-    return uri.equals("/api/refresh") || uri.startsWith("/api/oauth/");
+    return uri.equals("/api/refresh")
+        || uri.startsWith("/api/oauth/")
+        || uri.startsWith("/api/chatbot/");
   }
 }
