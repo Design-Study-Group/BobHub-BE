@@ -22,6 +22,7 @@ public class Recommendation {
   private boolean isReservation;
   private boolean deleted;
   private LocalDateTime deletedAt;
+  private LocalDateTime createdAt;
 
   public void setIsReservation(boolean isReservation) {
     this.isReservation = isReservation;
