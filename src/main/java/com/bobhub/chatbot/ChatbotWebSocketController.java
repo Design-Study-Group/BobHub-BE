@@ -2,19 +2,29 @@ package com.bobhub.chatbot;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+
+import java.util.concurrent.CompletableFuture;
 
 @Controller
 @RequiredArgsConstructor
 public class ChatbotWebSocketController {
 
   private final ChatbotService chatbotService;
+  private final SimpMessagingTemplate messagingTemplate;
 
   @MessageMapping("/chatbot")
-  @SendTo("/topic/messages")
-  public String handleChatbotMessage(String message) {
-    // Gemini AI를 사용하여 응답 생성
-    return chatbotService.getKoreanChatResponse(message);
+  public void handleChatbotMessage(String message, SimpMessageHeaderAccessor headerAccessor) {
+    String sessionId = headerAccessor.getSessionId();
+    CompletableFuture<String> futureResponse = chatbotService.getKoreanChatResponse(message);
+    
+    futureResponse.thenAccept(response -> {
+        messagingTemplate.convertAndSendToUser(sessionId, "/queue/messages", response);
+    }).exceptionally(ex -> {
+        messagingTemplate.convertAndSendToUser(sessionId, "/queue/messages", "Error processing your request: " + ex.getMessage());
+        return null;
+    });
   }
 }
