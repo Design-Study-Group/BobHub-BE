@@ -10,15 +10,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.PreDestroy;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -35,16 +33,21 @@ public class ChatbotService {
   private final long BATCH_DELAY_SECONDS = 1;
 
   private static class Request {
-      String message;
-      CompletableFuture<String> future;
+    String message;
+    CompletableFuture<String> future;
 
-      public Request(String message, CompletableFuture<String> future) {
-          this.message = message;
-          this.future = future;
-      }
+    public Request(String message, CompletableFuture<String> future) {
+      this.message = message;
+      this.future = future;
+    }
 
-      public String getMessage() { return message; }
-      public CompletableFuture<String> getFuture() { return future; }
+    public String getMessage() {
+      return message;
+    }
+
+    public CompletableFuture<String> getFuture() {
+      return future;
+    }
   }
 
   public ChatbotService(ChatClient chatClient) {
@@ -53,20 +56,20 @@ public class ChatbotService {
 
   @PreDestroy
   public void shutdown() {
-      scheduler.shutdown();
-      aiCallExecutor.shutdown();
-      try {
-          if (!scheduler.awaitTermination(5, TimeUnit.SECONDS)) {
-              scheduler.shutdownNow();
-          }
-          if (!aiCallExecutor.awaitTermination(5, TimeUnit.SECONDS)) {
-              aiCallExecutor.shutdownNow();
-          }
-      } catch (InterruptedException e) {
-          scheduler.shutdownNow();
-          aiCallExecutor.shutdownNow();
-          Thread.currentThread().interrupt();
+    scheduler.shutdown();
+    aiCallExecutor.shutdown();
+    try {
+      if (!scheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+        scheduler.shutdownNow();
       }
+      if (!aiCallExecutor.awaitTermination(5, TimeUnit.SECONDS)) {
+        aiCallExecutor.shutdownNow();
+      }
+    } catch (InterruptedException e) {
+      scheduler.shutdownNow();
+      aiCallExecutor.shutdownNow();
+      Thread.currentThread().interrupt();
+    }
   }
 
   public CompletableFuture<String> getKoreanChatResponse(String message) {
@@ -74,50 +77,56 @@ public class ChatbotService {
     requestQueue.offer(new Request(message, future));
 
     synchronized (this) {
-        if (!batchProcessingScheduled) {
-            scheduler.schedule(this::processBatch, BATCH_DELAY_SECONDS, TimeUnit.SECONDS);
-            batchProcessingScheduled = true;
-        }
+      if (!batchProcessingScheduled) {
+        scheduler.schedule(this::processBatch, BATCH_DELAY_SECONDS, TimeUnit.SECONDS);
+        batchProcessingScheduled = true;
+      }
     }
     return future;
   }
 
   private void processBatch() {
-      List<Request> currentBatch = new ArrayList<>();
-      Request req;
-      while ((req = requestQueue.poll()) != null) {
-          currentBatch.add(req);
-      }
+    List<Request> currentBatch = new ArrayList<>();
+    Request req;
+    while ((req = requestQueue.poll()) != null) {
+      currentBatch.add(req);
+    }
 
-      if (currentBatch.isEmpty()) {
-          synchronized (this) {
-              batchProcessingScheduled = false;
-          }
-          return;
+    if (currentBatch.isEmpty()) {
+      synchronized (this) {
+        batchProcessingScheduled = false;
       }
+      return;
+    }
 
-      for (Request request : currentBatch) {
-          CompletableFuture.supplyAsync(() -> {
-              try {
+    for (Request request : currentBatch) {
+      CompletableFuture.supplyAsync(
+              () -> {
+                try {
                   PromptTemplate promptTemplate = new PromptTemplate(chatPromptTemplate);
                   Prompt prompt = promptTemplate.create(Map.of("message", request.getMessage()));
                   return chatClient.prompt(prompt).call().content();
-              } catch (Exception e) {
-                  log.error("Error during AI call for message '{}': {}", request.getMessage(), e.getMessage());
+                } catch (Exception e) {
+                  log.error(
+                      "Error during AI call for message '{}': {}",
+                      request.getMessage(),
+                      e.getMessage());
                   throw new RuntimeException("AI processing failed", e);
-              }
-          }, aiCallExecutor)
-          .whenComplete((response, throwable) -> {
-              if (throwable != null) {
+                }
+              },
+              aiCallExecutor)
+          .whenComplete(
+              (response, throwable) -> {
+                if (throwable != null) {
                   request.getFuture().completeExceptionally(throwable);
-              } else {
+                } else {
                   request.getFuture().complete(response);
-              }
-          });
-      }
+                }
+              });
+    }
 
-      synchronized (this) {
-          batchProcessingScheduled = false;
-      }
+    synchronized (this) {
+      batchProcessingScheduled = false;
+    }
   }
 }
