@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bobhub.activity.mapper.ActivityMapper">
+
+    <select id="findRecentActivities" resultType="com.bobhub.activity.dto.ActivityResponse">
+        SELECT type, id as referenceId, title, createdAt, category, userId, userName
+        FROM (
+                 SELECT 'party' AS type, p.id, p.title, p.created_at AS createdAt, p.category, u.id as userId, u.name as userName
+                 FROM party p
+                 JOIN users u ON p.owner_id = u.id
+                 UNION ALL
+                 SELECT 'recommendation' AS type, r.id, r.store_name AS title, r.created_at AS createdAt, r.category, u.id as userId, u.name as userName
+                 FROM recommendation r
+                 JOIN users u ON r.user_id = u.id
+                 WHERE r.deleted = 0
+             ) recent_activities
+        ORDER BY createdAt DESC
+        FETCH FIRST 5 ROWS ONLY
+    </select>
+
+</mapper>

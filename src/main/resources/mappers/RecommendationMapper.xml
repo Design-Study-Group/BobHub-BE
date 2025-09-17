@@ -16,15 +16,16 @@
         <result property="ratingCount" column="RATING_COUNT"/>
         <result property="deleted" column="DELETED"/>
         <result property="deletedAt" column="DELETED_AT"/>
+        <result property="createdAt" column="CREATED_AT"/>
     </resultMap>
 
     <select id="findAll" resultMap="recommendationResultMap">
-        select * from RECOMMENDATION where DELETED = 0 order by id desc
+        select * from RECOMMENDATION where DELETED = 0 order by CREATED_AT desc
     </select>
 
     <insert id="insert" parameterType="com.bobhub.recommendation.domain.Recommendation">
-        insert into RECOMMENDATION (ID, USER_ID, CATEGORY, STORE_NAME, DESCRIPTION, TOTAL_TIME, PRICE_PER_PERSON, IS_RESERVATION, DELETED)
-        values (RECOMMENDATION_SEQ.NEXTVAL, #{userId}, #{category}, #{storeName}, #{description}, #{totalTime}, #{pricePerPerson}, #{isReservation}, 0)
+        insert into RECOMMENDATION (ID, USER_ID, CATEGORY, STORE_NAME, DESCRIPTION, TOTAL_TIME, PRICE_PER_PERSON, IS_RESERVATION, DELETED, CREATED_AT)
+        values (RECOMMENDATION_SEQ.NEXTVAL, #{userId}, #{category}, #{storeName}, #{description}, #{totalTime}, #{pricePerPerson}, #{isReservation}, 0, SYSTIMESTAMP)
     </insert>
 
     <!--    <update id = "updateHits" parameterType="Long">-->
